@@ -137,7 +137,14 @@ const Ride3D = (() => {
 
   /* ---------- Rendu ---------- */
   let fovDeg = 62;
+  let hallPrep = false;
+  function prepareHall() {   // v6.50 : le hall (maillages, avions, panneau) coûte une centaine de ms : on le prépare pendant la bretelle
+    if (hallPrep || fly || P.path === "ring") return;
+    const sp = NET.spokes[P.path]; if (!sp || !sp.door || halls.has(sp)) return;
+    hallPrep = true; setTimeout(() => { const t0 = performance.now(); try { hallOf(sp); } catch (e) {} hallPrep = false; if (PERF) console.log("hall préparé en " + Math.round(performance.now() - t0) + " ms"); }, 150);
+  }
   function render(dt = dtS) {
+    prepareHall();
     const path = pathOf(P.path), f = path.at(P.s), fwd = V3.sc(f.t, P.dir), right = V3.sc(f.r, P.dir);
     const pos = [f.p[0] + right[0] * P.x, f.p[1], f.p[2] + right[2] * P.x];
     const ah = path.at(P.s + P.dir * 5), bh = path.at(P.s - P.dir * 5);

@@ -130,7 +130,7 @@ const Flight3D = (() => {
     cam.shadowTarget = [x, 0, 0];
     const from = envOf(AMB3.airport), to = envOf(AMB3[opts.amb] || AMB3.paris), env = envMix(from, to, smooth((k - .45) / .5));
     env.fogN = 600; env.fogF = 6000; env.shadowR = 90; env.clouds = Math.max(env.clouds, .35);
-    const items = [{ mesh: scene.ground }, { mesh: scene.far, shadow: false, fog: .8 }, { mesh: plane, m: pmF, spec: .35 }];
+    const items = [{ mesh: scene.ground, shadow: false }, { mesh: scene.far, shadow: false, fog: .8 }, { mesh: plane, m: pmF, spec: .35 }];
     const dm = destMesh(opts.world); if (dm && k > .55) items.push({ mesh: dm, fog: .8 });
     GLR.render(cam, env, items, [], t);
     env.cloudLow = (AMB3[opts.amb] || {}).night && k > .6 ? [.25, .25, .35] : cmix(opts.reverse ? "#c9a89a" : "#9aa8bf", "#ffffff", .1);

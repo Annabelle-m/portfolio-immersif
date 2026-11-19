@@ -38,3 +38,11 @@ Only `v6/` is present in this repository. Earlier versions were separate folders
 - **Rider model simplified** from 189 252 to 26 312 triangles (3.7 MB to 0.6 MB). It was drawn twice per frame (scene and shadow) while covering a tiny part of the screen. New tool: `tools/decimate_glb.py`.
 - **Scenery chunks split into 48 m cells** (`GLR.meshCells`), so culling removes whatever is out of view or out of the shadow box. Triangles per frame went from about 1.3 million to about 0.7 million.
 - Adaptive resolution floor raised to 50 %.
+
+## v6.50: smoother return to the home hall
+
+- **Return animation** (`hallIn`) no longer animates `filter: blur() brightness()` on the whole SVG hall. It uses `transform` on its own GPU layer plus a fading overlay for the light flash.
+- **White veil** is lifted only after the first painted frame of the home view, so the heavy first paint is hidden.
+- **3D terminal hall** is prepared during the access road instead of at the door (about 20 ms, so now invisible).
+- **Return flight:** the ground no longer casts shadows (about half the triangles per frame).
+- **Minimap:** removed the extra US flag planted in the Statue of Liberty illustration (the plate already has one).
