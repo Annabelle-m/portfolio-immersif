@@ -8,6 +8,7 @@ projects, contact).
 It is written in plain HTML, CSS and JavaScript on top of a small hand-written
 WebGL2 engine. There is no framework, no bundler and no build step.
 
+- **Live site:** https://annabelle-megy-portfolio.vercel.app (deployed automatically by Vercel on every push to `main`).
 - **Languages:** French and English (switch at runtime).
 - **Modes:** immersive 3D, or a classic scrolling page for quick reading.
 - **Sound:** generative music and ambience, synthesised with Web Audio (no audio files).
