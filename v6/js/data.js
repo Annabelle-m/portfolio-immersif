@@ -133,27 +133,27 @@ const WORLDS = [
       {
         id: "losangeles", amb: "losangeles", name: "Los Angeles",
         panel: {
-          fr: { kicker: "Los Angeles · Front-end", title: "Front-end",
-            lead: "Je pars d'une maquette et j'en fais une page qui s'adapte à l'écran, puis une interface qui réagit.",
-            items: [["HTML · CSS", "Mises en page responsives en Flexbox et Grid, avec Bootstrap quand le projet s'y prête."], ["JavaScript", "Manipulation du DOM, événements, appels d'API asynchrones."], ["React", "Composants, routage avec React Router, données venues d'une API. C'est ce que je pratique cette année en Bachelor."]],
-            tags: ["HTML", "CSS", "JavaScript", "React", "Vite", "Bootstrap"] },
-          en: { kicker: "Los Angeles · Front-end", title: "Front-end",
-            lead: "I start from a mock-up and turn it into a page that adapts to the screen, then into an interface that responds.",
-            items: [["HTML · CSS", "Responsive layouts with Flexbox and Grid, and Bootstrap when the project calls for it."], ["JavaScript", "DOM manipulation, events, asynchronous API calls."], ["React", "Components, routing with React Router, data loaded from an API. This is what I practise this year in my Bachelor's."]],
-            tags: ["HTML", "CSS", "JavaScript", "React", "Vite", "Bootstrap"] }
+          fr: { kicker: "Los Angeles · Web et mobile", title: "Web et mobile",
+            lead: "Je pars d'une maquette et j'en fais une page qui s'adapte à l'écran, puis une interface qui réagit, sur le web comme sur mobile.",
+            items: [["HTML5 · CSS", "Mises en page responsives en Flexbox et Grid, avec Bootstrap quand le projet s'y prête."], ["JavaScript", "Manipulation du DOM, événements, appels d'API asynchrones."], ["React · Angular", "Composants, routage avec React Router, données venues d'une API. React est ce que je pratique cette année en Bachelor."], ["Node.js", "JavaScript côté serveur."], ["Mobile et jeu", "Swift, Kotlin et Unity."]],
+            tags: ["HTML5", "CSS", "JavaScript", "React", "Angular", "Node.js", "Swift", "Kotlin", "Unity", "Vite", "Bootstrap"] },
+          en: { kicker: "Los Angeles · Web and mobile", title: "Web and mobile",
+            lead: "I start from a mock-up and turn it into a page that adapts to the screen, then into an interface that responds, on the web as on mobile.",
+            items: [["HTML5 · CSS", "Responsive layouts with Flexbox and Grid, and Bootstrap when the project calls for it."], ["JavaScript", "DOM manipulation, events, asynchronous API calls."], ["React · Angular", "Components, routing with React Router, data loaded from an API. React is what I practise this year in my Bachelor's."], ["Node.js", "JavaScript on the server side."], ["Mobile and games", "Swift, Kotlin and Unity."]],
+            tags: ["HTML5", "CSS", "JavaScript", "React", "Angular", "Node.js", "Swift", "Kotlin", "Unity", "Vite", "Bootstrap"] }
         }
       },
       {
         id: "newyork", amb: "newyork", name: "New York",
         panel: {
-          fr: { kicker: "New York · Back-end", title: "Back-end",
-            lead: "PHP tous les jours en entreprise, Symfony sur mes projets de formation.",
-            items: [["PHP natif", "Mon outil quotidien en alternance chez DBF Automobiles."], ["Symfony", "Contrôleurs, entités Doctrine, formulaires et gabarits Twig : la base de MoovBiz Travel."], ["Comptes utilisateurs", "Inscription, connexion, sessions et réinitialisation du mot de passe par e-mail, codées sans framework dans Kanbanio."]],
-            tags: ["PHP", "Symfony", "Doctrine", "Twig", "MVC"] },
-          en: { kicker: "New York · Back-end", title: "Back-end",
-            lead: "PHP every day at work, Symfony on my training projects.",
-            items: [["Plain PHP", "My everyday tool in my work-study at DBF Automobiles."], ["Symfony", "Controllers, Doctrine entities, forms and Twig templates: the foundation of MoovBiz Travel."], ["User accounts", "Sign-up, login, sessions and password reset by email, written without a framework in Kanbanio."]],
-            tags: ["PHP", "Symfony", "Doctrine", "Twig", "MVC"] }
+          fr: { kicker: "New York · Langages et back-end", title: "Langages et back-end",
+            lead: "Java, C#, Python, PHP et JavaScript, avec PHP tous les jours en entreprise et Symfony sur mes projets de formation.",
+            items: [["Langages", "Java, C#, Python, PHP et JavaScript."], ["PHP natif", "Mon outil quotidien en alternance chez DBF Automobiles."], ["Symfony", "Contrôleurs, entités Doctrine, formulaires et gabarits Twig : la base de MoovBiz Travel."], ["Comptes utilisateurs", "Inscription, connexion, sessions et réinitialisation du mot de passe par e-mail, codées sans framework dans Kanbanio."]],
+            tags: ["Java", "C#", "Python", "PHP", "JavaScript", "Symfony", "Twig", "MVC"] },
+          en: { kicker: "New York · Languages and back-end", title: "Languages and back-end",
+            lead: "Java, C#, Python, PHP and JavaScript, with PHP every day at work and Symfony on my training projects.",
+            items: [["Languages", "Java, C#, Python, PHP and JavaScript."], ["Plain PHP", "My everyday tool in my work-study at DBF Automobiles."], ["Symfony", "Controllers, Doctrine entities, forms and Twig templates: the foundation of MoovBiz Travel."], ["User accounts", "Sign-up, login, sessions and password reset by email, written without a framework in Kanbanio."]],
+            tags: ["Java", "C#", "Python", "PHP", "JavaScript", "Symfony", "Twig", "MVC"] }
         }
       },
       {
@@ -161,12 +161,12 @@ const WORLDS = [
         panel: {
           fr: { kicker: "Las Vegas · Données", title: "Bases de données",
             lead: "Je modélise avant de créer les tables, puis j'écris les requêtes.",
-            items: [["MySQL", "Requêtes SQL, jointures et opérations CRUD sur des bases relationnelles."], ["Merise", "MCD puis MLD, pour poser les données avant le code."], ["Outils", "phpMyAdmin au quotidien, Doctrine et ses migrations sous Symfony."]],
-            tags: ["SQL", "MySQL", "Merise", "Doctrine", "phpMyAdmin"] },
+            items: [["MySQL", "Requêtes SQL, jointures et opérations CRUD sur des bases relationnelles."], ["MongoDB", "Base de données NoSQL orientée documents."], ["Merise", "MCD puis MLD, pour poser les données avant le code."], ["Outils", "phpMyAdmin au quotidien, Doctrine et ses migrations sous Symfony."]],
+            tags: ["SQL", "MySQL", "MongoDB", "Merise", "Doctrine", "phpMyAdmin"] },
           en: { kicker: "Las Vegas · Data", title: "Databases",
             lead: "I model the data before creating tables, then write the queries.",
-            items: [["MySQL", "SQL queries, joins and CRUD operations on relational databases."], ["Merise", "Conceptual then logical data models, to settle the data before the code."], ["Tools", "phpMyAdmin day to day, Doctrine and its migrations with Symfony."]],
-            tags: ["SQL", "MySQL", "Merise", "Doctrine", "phpMyAdmin"] }
+            items: [["MySQL", "SQL queries, joins and CRUD operations on relational databases."], ["MongoDB", "Document-oriented NoSQL database."], ["Merise", "Conceptual then logical data models, to settle the data before the code."], ["Tools", "phpMyAdmin day to day, Doctrine and its migrations with Symfony."]],
+            tags: ["SQL", "MySQL", "MongoDB", "Merise", "Doctrine", "phpMyAdmin"] }
         }
       },
       {
@@ -174,12 +174,12 @@ const WORLDS = [
         panel: {
           fr: { kicker: "Miami · Collins Avenue · Méthodes et outils", title: "Méthodes et outils",
             lead: "Ce qui entoure le code : versionner, tester, mettre en ligne, s'organiser.",
-            items: [["Git · GitHub", "Chaque projet est versionné et publié."], ["Tests et mise en ligne", "Premiers tests de bout en bout avec Playwright, déploiement sur Vercel."], ["Organisation", "Méthode Agile et Kanban, maquettes sur Figma, suivi sur Trello."], ["À creuser", "L'IA appliquée au développement, une piste pour le master."]],
-            tags: ["Git", "GitHub", "Playwright", "Vercel", "Figma", "Agile"] },
+            items: [["Git · GitHub · GitLab", "Chaque projet est versionné et publié."], ["Docker", "Conteneurisation des applications."], ["Tests et mise en ligne", "Premiers tests de bout en bout avec Playwright, déploiement sur Vercel."], ["Organisation", "Méthodes Agile / Scrum et Kanban, maquettes sur Figma, suivi sur Trello."], ["À creuser", "L'IA appliquée au développement, une piste pour le master."]],
+            tags: ["Git", "GitHub", "GitLab", "Docker", "Agile", "Scrum", "Playwright", "Vercel", "Figma"] },
           en: { kicker: "Miami · Collins Avenue · Methods and tools", title: "Methods and tools",
             lead: "What surrounds the code: versioning, testing, deploying, getting organised.",
-            items: [["Git · GitHub", "Every project is versioned and published."], ["Testing and deployment", "First end-to-end tests with Playwright, deployment on Vercel."], ["Organisation", "Agile and Kanban, mock-ups in Figma, tracking in Trello."], ["Next to explore", "AI applied to software development, a track for my Master's."]],
-            tags: ["Git", "GitHub", "Playwright", "Vercel", "Figma", "Agile"] }
+            items: [["Git · GitHub · GitLab", "Every project is versioned and published."], ["Docker", "Containerisation of applications."], ["Testing and deployment", "First end-to-end tests with Playwright, deployment on Vercel."], ["Organisation", "Agile / Scrum and Kanban, mock-ups in Figma, tracking in Trello."], ["Next to explore", "AI applied to software development, a track for my Master's."]],
+            tags: ["Git", "GitHub", "GitLab", "Docker", "Agile", "Scrum", "Playwright", "Vercel", "Figma"] }
         }
       }
     ]

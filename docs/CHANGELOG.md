@@ -92,3 +92,16 @@ Safari and Chrome reload a tab that uses too much memory ("This page was reloade
 - Pure CSS animation (no script, no video, so it works the same on every browser). With `prefers-reduced-motion`, only the first image is shown.
 - Shorter tagline so both cards fit above the fold on a laptop screen.
 - To refresh the pictures after a visual change, capture the scenes again (the cards use `assets/landing/immersive-1..4.webp` and `classic-1..3.webp`, 1200x900).
+
+## v6.56: skills updated
+
+The four skill cities now cover the full list (FR and EN, 3D panels, classic cards and 3D billboards):
+
+| City | Now titled | Contents |
+| --- | --- | --- |
+| Los Angeles | Web and mobile | HTML5, CSS, JavaScript, React, Angular, Node.js, Swift, Kotlin, Unity (+ Vite, Bootstrap) |
+| New York | Languages and back-end | Java, C#, Python, PHP, JavaScript (+ Symfony, Twig, MVC) |
+| Las Vegas | Databases | SQL, MySQL, MongoDB (+ Merise, Doctrine, phpMyAdmin) |
+| Miami | Methods and tools | Git, GitHub, GitLab, Docker, Agile, Scrum (+ Playwright, Vercel, Figma) |
+
+New technologies were added with a neutral description only (no level or project claimed). New tile icons are declared in `IC` (`v6/js/app.js`). Panel titles changed, so the classic navigation labels changed too.
