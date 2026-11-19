@@ -147,13 +147,13 @@ const WORLDS = [
         id: "newyork", amb: "newyork", name: "New York",
         panel: {
           fr: { kicker: "New York · Langages et back-end", title: "Langages et back-end",
-            lead: "Java, C#, Python, PHP et JavaScript, avec PHP tous les jours en entreprise et Symfony sur mes projets de formation.",
-            items: [["Langages", "Java, C#, Python, PHP et JavaScript."], ["PHP natif", "Mon outil quotidien en alternance chez DBF Automobiles."], ["Symfony", "Contrôleurs, entités Doctrine, formulaires et gabarits Twig : la base de MoovBiz Travel."], ["Comptes utilisateurs", "Inscription, connexion, sessions et réinitialisation du mot de passe par e-mail, codées sans framework dans Kanbanio."]],
-            tags: ["Java", "C#", "Python", "PHP", "JavaScript", "Symfony", "Twig", "MVC"] },
+            lead: "Java, C#, Python, PHP, JavaScript et TypeScript, avec PHP tous les jours en entreprise et Symfony sur mes projets de formation.",
+            items: [["Langages", "Java, C#, Python, PHP, JavaScript et TypeScript."], ["PHP natif", "Mon outil quotidien en alternance chez DBF Automobiles."], ["Symfony", "Contrôleurs, entités Doctrine, formulaires et gabarits Twig : la base de MoovBiz Travel."], ["Comptes utilisateurs", "Inscription, connexion, sessions et réinitialisation du mot de passe par e-mail, codées sans framework dans Kanbanio."]],
+            tags: ["Java", "C#", "Python", "PHP", "JavaScript", "TypeScript", "Symfony", "Twig", "MVC"] },
           en: { kicker: "New York · Languages and back-end", title: "Languages and back-end",
-            lead: "Java, C#, Python, PHP and JavaScript, with PHP every day at work and Symfony on my training projects.",
-            items: [["Languages", "Java, C#, Python, PHP and JavaScript."], ["Plain PHP", "My everyday tool in my work-study at DBF Automobiles."], ["Symfony", "Controllers, Doctrine entities, forms and Twig templates: the foundation of MoovBiz Travel."], ["User accounts", "Sign-up, login, sessions and password reset by email, written without a framework in Kanbanio."]],
-            tags: ["Java", "C#", "Python", "PHP", "JavaScript", "Symfony", "Twig", "MVC"] }
+            lead: "Java, C#, Python, PHP, JavaScript and TypeScript, with PHP every day at work and Symfony on my training projects.",
+            items: [["Languages", "Java, C#, Python, PHP, JavaScript and TypeScript."], ["Plain PHP", "My everyday tool in my work-study at DBF Automobiles."], ["Symfony", "Controllers, Doctrine entities, forms and Twig templates: the foundation of MoovBiz Travel."], ["User accounts", "Sign-up, login, sessions and password reset by email, written without a framework in Kanbanio."]],
+            tags: ["Java", "C#", "Python", "PHP", "JavaScript", "TypeScript", "Symfony", "Twig", "MVC"] }
         }
       },
       {
@@ -161,12 +161,12 @@ const WORLDS = [
         panel: {
           fr: { kicker: "Las Vegas · Données", title: "Bases de données",
             lead: "Je modélise avant de créer les tables, puis j'écris les requêtes.",
-            items: [["MySQL", "Requêtes SQL, jointures et opérations CRUD sur des bases relationnelles."], ["MongoDB", "Base de données NoSQL orientée documents."], ["Merise", "MCD puis MLD, pour poser les données avant le code."], ["Outils", "phpMyAdmin au quotidien, Doctrine et ses migrations sous Symfony."]],
-            tags: ["SQL", "MySQL", "MongoDB", "Merise", "Doctrine", "phpMyAdmin"] },
+            items: [["MySQL", "Requêtes SQL, jointures et opérations CRUD sur des bases relationnelles."], ["MongoDB", "Base de données NoSQL orientée documents."], ["TypeORM", "ORM pour interroger la base depuis TypeScript."], ["Merise", "MCD puis MLD, pour poser les données avant le code."], ["Outils", "phpMyAdmin au quotidien, Doctrine et ses migrations sous Symfony."]],
+            tags: ["SQL", "MySQL", "MongoDB", "TypeORM", "Merise", "Doctrine", "phpMyAdmin"] },
           en: { kicker: "Las Vegas · Data", title: "Databases",
             lead: "I model the data before creating tables, then write the queries.",
-            items: [["MySQL", "SQL queries, joins and CRUD operations on relational databases."], ["MongoDB", "Document-oriented NoSQL database."], ["Merise", "Conceptual then logical data models, to settle the data before the code."], ["Tools", "phpMyAdmin day to day, Doctrine and its migrations with Symfony."]],
-            tags: ["SQL", "MySQL", "MongoDB", "Merise", "Doctrine", "phpMyAdmin"] }
+            items: [["MySQL", "SQL queries, joins and CRUD operations on relational databases."], ["MongoDB", "Document-oriented NoSQL database."], ["TypeORM", "ORM to query the database from TypeScript."], ["Merise", "Conceptual then logical data models, to settle the data before the code."], ["Tools", "phpMyAdmin day to day, Doctrine and its migrations with Symfony."]],
+            tags: ["SQL", "MySQL", "MongoDB", "TypeORM", "Merise", "Doctrine", "phpMyAdmin"] }
         }
       },
       {

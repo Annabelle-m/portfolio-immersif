@@ -100,8 +100,8 @@ The four skill cities now cover the full list (FR and EN, 3D panels, classic car
 | City | Now titled | Contents |
 | --- | --- | --- |
 | Los Angeles | Web and mobile | HTML5, CSS, JavaScript, React, Angular, Node.js, Swift, Kotlin, Unity (+ Vite, Bootstrap) |
-| New York | Languages and back-end | Java, C#, Python, PHP, JavaScript (+ Symfony, Twig, MVC) |
-| Las Vegas | Databases | SQL, MySQL, MongoDB (+ Merise, Doctrine, phpMyAdmin) |
+| New York | Languages and back-end | Java, C#, Python, PHP, JavaScript, TypeScript (+ Symfony, Twig, MVC) |
+| Las Vegas | Databases | SQL, MySQL, MongoDB, TypeORM (+ Merise, Doctrine, phpMyAdmin) |
 | Miami | Methods and tools | Git, GitHub, GitLab, Docker, Agile, Scrum (+ Playwright, Vercel, Figma) |
 
 New technologies were added with a neutral description only (no level or project claimed). New tile icons are declared in `IC` (`v6/js/app.js`). Panel titles changed, so the classic navigation labels changed too.
