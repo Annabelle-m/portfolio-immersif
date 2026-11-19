@@ -952,3 +952,6 @@ html.lenis, html.lenis body { height: auto; }
 
 /* v6.51 : pendant l'entrée dans le terminal, le bouton « Passer » prend la place du compteur de vitesse */
 #ride:has(#hallSkip:not([hidden])) .speedo { display: none; }
+
+/* v6.53 : embranchements vers l'aéroport sur la carte (pointillés ronds, couleur du monde) */
+.mm-spoke { stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 7 4.5; opacity: 1; fill: none; filter: none; }

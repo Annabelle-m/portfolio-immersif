@@ -688,7 +688,7 @@ function buildJunction(sec, a, mb, bg, signs, r) {
       if (lat < 10.8 || sec.sb + d > sec.end - 3) continue; const fm = frameAt(path, sec.sb + d, side * (lat / 2), 0, "back"), Lm = new Loc(mb, [fm.p[0], fm.p[1] + .02, fm.p[2]], fm.ry);
       Lm.mt(MAT.plain); Lm.cyl(0, 0, 0, .07, 1.05, 8, "#f2f2ee"); Lm.cyl(0, .62, 0, .075, .14, 8, "#d8432f"); Lm.cyl(0, .8, 0, .075, .14, 8, "#f2f2ee"); } }
   // décor aéroportuaire, côté opposé à la bretelle
-  for (let s = sec.start + 6; s < sec.end; s += 16) [-1, 1].forEach((sd) => { const f2 = frameAt(path, s, sd * 7.2); PROP.lamp(new Loc(mb, [f2.p[0], f2.p[1], f2.p[2]], f2.ry), 0, 0, r, a); });
+  for (let s = sec.start + 6; s < sec.end; s += 16) [-1, 1].forEach((sd) => { const f2 = frameAt(path, s, sd * 7.2); if (!NET.clear(f2.p, .6)) return; /* v6.53 : pas de lampadaire dans la voie de la bretelle */ PROP.lamp(new Loc(mb, [f2.p[0], f2.p[1], f2.p[2]], f2.ry), 0, 0, r, a); });
   // v6.13 : plus de faux terminal ni de tour de contrôle côté opposé (on croyait l'aéroport à gauche) ; le seul aéroport est le hub, au bout de la bretelle
   for (let k = 0; k < 6; k++) { const f3 = frameAt(path, sec.start + 5 + k * 9, -side * (13 + (k % 3) * 7)); if (NET.clear(f3.p, 2)) PROP.tree(new Loc(mb, [f3.p[0], f3.p[1], f3.p[2]], f3.ry), 0, 0, r, a); }
 }

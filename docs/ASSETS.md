@@ -44,7 +44,7 @@ python3 tools/people_sdf.py    # writes models/people.glb
 python3 tools/gen_hall.py      # rewrites the hall SVG in index.html
 ```
 
-`gen_hall.py` edits `index.html` in place. Keep a copy if you have hand-edited the hall.
+`gen_hall.py` edits `index.html` in place. Avoid SVG `filter` blurs in it: they froze Safari for about a second when the hall appeared. Keep a copy if you have hand-edited the hall.
 
 ## Blender scripts (`v6/blender/`, `v6/tools/blender/`)
 

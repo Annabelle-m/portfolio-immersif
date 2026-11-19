@@ -241,6 +241,8 @@
     out += `<circle r="${MMR}" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="10"/>`;
     WORLDS.forEach((w, i) => { const r = (d) => pt(d, MMR), [x0, y0] = r(-126 + 72 * i + 2), [x1, y1] = r(-126 + 72 * (i + 1) - 2); out += `<path d="M${x0} ${y0} A${MMR} ${MMR} 0 0 1 ${x1} ${y1}" stroke="${w.accent}" class="mp-glow"/><path d="M${x0} ${y0} A${MMR} ${MMR} 0 0 1 ${x1} ${y1}" stroke="${w.accent}" class="mp-arc"/>`; });
     out += `<circle id="mmTrail" r="${MMR}" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="0 400" transform="rotate(-126)" opacity=".9"/>`;
+    // v6.53 : les embranchements vers l'aéroport central (le scooter les suit en rayon quand il prend la bretelle)
+    NET.junctions.forEach((j) => { const deg = -126 + 72 * mmDisp(j.sb / total), [x0, y0] = pt(deg, MMR - 3), [x1, y1] = pt(deg, MMR * .22 + 11); out += `<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" class="mm-spoke" style="stroke:${WORLDS[j.wi] ? WORLDS[j.wi].accent : "#ffb920"}"/>`; });
     WORLDS.forEach((w, i) => {
       const L0 = MM_LAY[i], deg = -90 + 72 * i, [nx, ny] = pt(deg, MMR), tri = NET.triggers.findIndex((tr) => tr.sec.world.id === w.id), nm = esc(L(w.country)), lb = esc(L(w.label)), pw = Math.max(74, nm.length * 7.4 + 38);
       out += `<g class="mp-w" data-w="${w.id}" data-mm="${tri}" tabindex="0" role="button" aria-label="${nm} · ${lb}" style="--c:${w.accent}">`;

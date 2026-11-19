@@ -25,7 +25,7 @@ o.append('<circle cx="560" cy="470" r="70" fill="url(#hGlow)" opacity=".65"/>')
 o.append('<path d="M468 482 h150 l-8 -3 q-30 -2 -62 -4 l-22 -24 h-8 l8 24 h-26 l-12 -10 h-8 l6 14 h-24 q-8 0 -8 3 Z" fill="#0c111b" opacity=".92"/>')   # avion
 o.append('<rect x="%d" y="%d" width="%d" height="3" fill="#06080d"/>' % (FWX1, FWY2-9, FWX2-FWX1))
 for x in (467, 513, 560, 607, 653): o.append('<rect x="%d" y="%d" width="2.4" height="%d" fill="#06080d"/>' % (x, FWY1, FWY2-FWY1))
-o.append('<g filter="url(#fb1)">')
+o.append('<g>')
 # le panneau des départs, tout au fond du hall (le vrai panneau vient s'y poser en zoomant)
 o.append('<g class="far-board"><ellipse cx="560" cy="437" rx="92" ry="52" fill="url(#hGlow)" opacity=".35"/><rect x="502" y="409" width="116" height="56" rx="4" fill="#0b0f17" stroke="#262d3b"/><rect x="502" y="409" width="116" height="11" rx="4" fill="#151b27"/><rect x="508" y="413" width="30" height="3" rx="1.5" fill="#ffc23d"/>')
 for i in range(5):
@@ -54,8 +54,8 @@ for t0, t1 in ((1.35,1.9),(2.3,3.1),(3.7,4.9)):
 o.append('</g>')
 # rayons de soleil couchant à travers la baie, reflets des colonnes et de la verrière sur le sol poli
 for k,(g0,g1) in enumerate(((-1,-.75),(-.78,-.52),(-.55,-.3))):
-    o.append('<polygon points="%s %s %s %s" fill="#ffb86b" opacity="%.2f" filter="url(#fbl)"/>' % (pt(P(1.2,g0,1)), pt(P(1.2,g1,1)), pt(P(7,g1+.3,1)), pt(P(7,g0+.3,1)), 0.16 - k*.03))
-o.append('<polygon points="%s %s %s %s" fill="#ffd9a0" opacity=".16" filter="url(#fbl)"/>' % (pt(P(1,-.12,1)), pt(P(1,.12,1)), pt(P(3,.3,1)), pt(P(3,-.3,1))))
+    o.append('<polygon points="%s %s %s %s" fill="#ffb86b" opacity="%.2f" stroke="#ffb86b" stroke-opacity=".06" stroke-width="18" stroke-linejoin="round"/>' % (pt(P(1.2,g0,1)), pt(P(1.2,g1,1)), pt(P(7,g1+.3,1)), pt(P(7,g0+.3,1)), 0.16 - k*.03))
+o.append('<polygon points="%s %s %s %s" fill="#ffd9a0" opacity=".16" stroke="#ffd9a0" stroke-opacity=".06" stroke-width="18" stroke-linejoin="round"/>' % (pt(P(1,-.12,1)), pt(P(1,.12,1)), pt(P(3,.3,1)), pt(P(3,-.3,1))))
 # sol : carreaux et reflets des baies
 o.append('<polygon points="%s %s %s %s" fill="url(#iGlint)"/>' % (pt(P(1,-1,1)), pt(P(1,-.3,1)), pt(P(T,-.3,1)), pt(P(T,-1,1))))
 for k in range(-8, 9):
@@ -66,13 +66,13 @@ o.append('<polygon points="%s %s %s %s" fill="#ffc98a" opacity=".07"/>' % (pt(P(
 # bloom des plafonniers
 for t in (1.35, 1.8, 2.4, 3.2, 4.4):
     for g in (-.62,-.2,.2,.62):
-        c = P(t,g,-1); o.append('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="#ffe2ad" opacity=".22" filter="url(#fb)"/>' % (c[0], c[1]+3*t, 16*t*.5+8, 5*t))
+        c = P(t,g,-1); o.append('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="url(#sGlow)" opacity=".34"/>' % (c[0], c[1]+3*t, (16*t*.5+8)*1.7+10, (5*t)*2.4+8))
 # colonnes
 for t in (1.7, 2.6, 3.8, 5.6):
     for g in (-.8, .8):
         x, y0, y1, w = VX + 140*t*g, VY-48*t, VY+48*t, 9.5*t
         o.append('<rect x="%.1f" y="%.1f" width="%.1f" height="%.1f" fill="url(#iCol)"/>' % (x-w/2, y0, w, y1-y0))
-        o.append('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="#000" opacity=".3" filter="url(#fb1)"/>' % (x, y1, w*.9, w*.2))
+        o.append('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="#000" opacity=".3"/>' % (x, y1, w*.9, w*.2))
         o.append('<rect x="%.1f" y="%.1f" width="%.1f" height="%.1f" fill="url(#iRefl)" opacity=".35"/>' % (x-w/2, y1, w, 52*t*.5))
 # enseignes suspendues
 for t, wd in ((3.3, 220),):
@@ -89,7 +89,7 @@ def girl(cls):
     arm = """<path d="M-7 0 C-11 22 -12 46 -11 68 L10 68 C11 46 10 22 7 0 Z" fill="url(#gCoat)"/><path d="M-11 63 H10 V70 H-11 Z" fill="#c2ab7e"/><path d="M-8 70 C-9 79 -6 86 0 87 C6 86 9 79 8 70 Z" fill="url(#gSkin)"/>"""
     leg = """<path d="M-24 -148 C-28 -112 -26 -92 -24 -72 C-22 -52 -23 -32 -20 -14 L-4 -14 C-3 -34 -3 -52 -2 -74 C-1 -102 0 -126 -2 -148 Z" fill="url(#%s)"/><path d="M-20 -14 L-4 -14 C-2 -7 -1 -2 -2 1 L-23 1 C-24 -4 -23 -9 -20 -14 Z" fill="url(#gShoe)"/><path d="M-23 -1 H-2" stroke="#120d09" stroke-width="3" stroke-linecap="round"/>"""
     return """<g class="char %s"><g class="sway"><g class="bob">
-  <ellipse cx="6" cy="3" rx="62" ry="10" fill="#000" opacity=".5" filter="url(#fb)"/>
+  <ellipse cx="6" cy="3" rx="62" ry="10" fill="#000" opacity=".4"/>
   <g class="leg l">""" % cls + leg % "gTrou" + """</g>
   <g class="leg r"><g transform="scale(-1,1)">""" + leg % "gTrouR" + """</g></g>
   <g class="arm l"><g transform="translate(-35,-246)"><g class="armi">""" + arm + """</g></g></g>
@@ -185,9 +185,7 @@ defs = '''<defs>
 <linearGradient id="gTrouR" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3b4458"/><stop offset="1" stop-color="#1c2230"/></linearGradient>
 <linearGradient id="gSkin" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#eebf9f"/><stop offset="1" stop-color="#c0906f"/></linearGradient>
 <linearGradient id="gBag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a35a2d"/><stop offset=".5" stop-color="#8b4a25"/><stop offset="1" stop-color="#5c2e16"/></linearGradient>
-<filter id="fb" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="6"/></filter>
-<filter id="fb1" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="1.6"/></filter>
-<filter id="fbl" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="14"/></filter>
+<radialGradient id="sGlow"><stop offset="0" stop-color="#ffe2ad" stop-opacity="1"/><stop offset=".45" stop-color="#ffe2ad" stop-opacity=".5"/><stop offset="1" stop-color="#ffe2ad" stop-opacity="0"/></radialGradient>
 <linearGradient id="gHair" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#63402c"/><stop offset="1" stop-color="#321c10"/></linearGradient>
 <linearGradient id="gCase" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#34496f"/><stop offset=".5" stop-color="#22304f"/><stop offset="1" stop-color="#0f1626"/></linearGradient>
 </defs>'''

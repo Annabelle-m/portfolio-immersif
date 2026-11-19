@@ -68,3 +68,10 @@ Safari and Chrome reload a tab that uses too much memory ("This page was reloade
 - **Shared, right-sized sign textures.** Identical signs share one texture, resolution is capped at about 160 px per metre, and the 2D canvas is released right after upload. This also removes the one-second freezes while scenery chunks were built during the first flight.
 - **Packed vertices** (24 bytes instead of 44): normals and colours as bytes.
 - **Space during the parachute jump.** After clicking a city on the map, that map pin kept the keyboard focus and swallowed Space (it re-triggered a jump). The focus is now released and the pin ignores Space and Esc while flying.
+
+## v6.53: Safari freeze, minimap branches, lamp posts
+
+- **Freeze at the start of the home zoom fixed.** Measured on WebKit (Safari's engine): one frame of about 950 ms when the home hall appeared. The cause was the 33 Gaussian-blur SVG filters in the hall illustration. They are replaced by radial gradients (ceiling glows) and soft strokes (floor light beams), so the look is almost unchanged. Worst frame is now about 40 ms. `tools/gen_hall.py` was updated, and `index.html` regenerated from it. Do not reintroduce SVG `filter` blurs on the hall.
+- **Minimap shows the branches to the airport.** Each junction is drawn as a dashed line, in its world's colour, from the ring to the central airport. The scooter follows it when it takes the access road.
+- **No more lamp post in the access-road lane.** The airport-side lamps in junction sections were placed without checking the roads (`NET.clear`), so one stood in the branch lane right after the junction.
+- **Diagnostics:** `?perf` in the URL shows fps, canvas size and the adaptive resolution scale (green box, top left).
