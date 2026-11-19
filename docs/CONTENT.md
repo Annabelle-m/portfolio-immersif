@@ -8,14 +8,14 @@ the 3D code to change what the portfolio says.
 ```js
 const PROFILE = {
   name, email, linkedin, github,
-  cv: "assets/cv/Annabelle_MEGY_CV.pdf",   // path relative to v6/
+  cv: "assets/cv/Annabelle_MEGY_CV_FS_M1M2.pdf",   // path relative to v6/
   role:  { fr, en },
   base:  { fr, en },
   pitch: { fr, en }
 };
 ```
 
-To update the CV, replace the PDF in `v6/assets/cv/` (or change `cv`).
+To update the CV, add the new PDF to `v6/assets/cv/`, change `cv` here and the footer link in the root `index.html`, and remove the old file (it stays public otherwise). The buttons labelled "Download my CV" use the `download` attribute.
 
 ## `UI`
 

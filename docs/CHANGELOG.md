@@ -105,3 +105,8 @@ The four skill cities now cover the full list (FR and EN, 3D panels, classic car
 | Miami | Methods and tools | Git, GitHub, GitLab, Docker, Agile, Scrum (+ Playwright, Vercel, Figma) |
 
 New technologies were added with a neutral description only (no level or project claimed). New tile icons are declared in `IC` (`v6/js/app.js`). Panel titles changed, so the classic navigation labels changed too.
+
+## v6.57: new CV
+
+- `v6/assets/cv/Annabelle_MEGY_CV_FS_M1M2.pdf` replaces the previous CV, which was removed from the repository.
+- "Download my CV" buttons (classic page and 3D contact panel) now use the `download` attribute, so the file is saved instead of opened. The footer link on the choice page still opens it in a new tab.

@@ -10,7 +10,7 @@ const PROFILE = {
   email: "annabelle.megy@gmail.com",
   linkedin: "https://www.linkedin.com/in/annabelle-megy-515721223/",
   github: "https://github.com/Annabelle-m",
-  cv: "assets/cv/Annabelle_MEGY_CV.pdf",
+  cv: "assets/cv/Annabelle_MEGY_CV_FS_M1M2.pdf",
   role: { fr: "Développeuse full-stack en alternance", en: "Full-stack developer, work-study" },
   base: { fr: "Bordeaux · télétravail ou présentiel · permis B", en: "Bordeaux, France · remote or on-site · driving licence" },
   pitch: {

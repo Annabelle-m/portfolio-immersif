@@ -152,7 +152,7 @@
   function contactHTML() {
     return `<div class="contact-card">
       <div class="mail-row"><span class="mail" id="mailText">${PROFILE.email}</span><button class="chip chip-alt" data-action="copy">${t("copy")}</button></div>
-      <div class="p-links"><a class="chip chip-solid" href="mailto:${PROFILE.email}">✉ E-mail</a><a class="chip chip-alt" href="${PROFILE.linkedin}" target="_blank" rel="noopener">LinkedIn ↗</a><a class="chip chip-alt" href="${PROFILE.github}" target="_blank" rel="noopener">GitHub ↗</a><a class="chip chip-alt" href="${PROFILE.cv}" target="_blank" rel="noopener">${t("cvBtn")} ↗</a></div></div>`;
+      <div class="p-links"><a class="chip chip-solid" href="mailto:${PROFILE.email}">✉ E-mail</a><a class="chip chip-alt" href="${PROFILE.linkedin}" target="_blank" rel="noopener">LinkedIn ↗</a><a class="chip chip-alt" href="${PROFILE.github}" target="_blank" rel="noopener">GitHub ↗</a><a class="chip chip-alt" href="${PROFILE.cv}" target="_blank" rel="noopener" download>${t("cvBtn")} ↗</a></div></div>`;
   }
   function postcardHTML() {
     return `<form class="postcard" id="postcard">
@@ -384,7 +384,7 @@
     const split = (txt) => txt.split(" ").map((wd) => `<span class="k-w">${[...wd].map((ch) => `<b>${esc(ch)}</b>`).join("")}</span>`).join(" ");
     const COUNT = { skills: fr ? "domaines" : "areas", experience: fr ? "postes" : "roles", projects: fr ? "projets" : "projects" };
     const arrow = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-    const cta = (label, href, ext) => `<a class="k-cta" href="${href}"${ext ? ` target="_blank" rel="noopener"` : ""}><i>${arrow}</i><span>${esc(label)}</span></a>`;
+    const cta = (label, href, ext) => `<a class="k-cta" href="${href}"${ext ? ` target="_blank" rel="noopener"` : ""}${/\.pdf$/i.test(href) ? " download" : ""}><i>${arrow}</i><span>${esc(label)}</span></a>`;
     const head = (w, title) => `<header class="k-head"><p class="k-label">${flag(w.id)}${esc(L(w.country))}</p><h2 aria-label="${esc(title)}"><span aria-hidden="true">${split(title)}</span></h2><p class="k-count">${COUNT[w.section] ? w.cities.length + " " + COUNT[w.section] : ""}</p><button class="k-fly" data-action="fly" data-world="${w.id}">${plane}<span>${fr ? "Explorer en scooter" : "Explore by scooter"}</span></button></header>`;
     const section = (id, title, kind, extras = {}) => { const w = world(id);
       if (kind === "cas") return `<section class="k-sec k-light" id="c-${w.section}"><p class="k-state">${esc(L(PROFILE.pitch)).replace(/(15 ans|15 years|applications web|web applications|web apps|alternance M1\/M2|Master's work-study[^.]*)/g, "<mark>$1</mark>")}</p><div class="k-cas-wrap" style="--n:${w.cities.length}"><div class="k-cas-pin">${head(w, title)}<div class="k-cas-list">${w.cities.map((c, i) => job(c, i)).join("")}</div></div></div></section>`;
