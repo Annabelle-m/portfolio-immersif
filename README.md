@@ -61,6 +61,7 @@ Each country matches one section of the CV.
 ```
 .
 ├── index.html            Landing page: choose the immersive or the classic version
+├── assets/landing/       Captures used by the choice page cards
 ├── vercel.json           Cache headers for static assets
 ├── docs/                 Project documentation (see below)
 ├── _dev/                 Throw-away patch scripts used during development

@@ -82,3 +82,13 @@ Safari and Chrome reload a tab that uses too much memory ("This page was reloade
 - Old links (`/#classic`, `/#paris`) are forwarded to `v6/` unchanged.
 - Without WebGL2 a notice is shown and the immersive card leads to the classic version.
 - Switching between versions at any time still works through the buttons already present in each version.
+
+## v6.55: landing page visuals
+
+- The "Recommended" badge is removed.
+- Each card now shows **real captures of the site** (`assets/landing/`, 7 WebP images, about 360 KB in total) in a slow cross-fade, with the text below on a plain background so it never covers the picture:
+  - immersive: the scooter in Paris, New York, Kyoto and Uluru;
+  - classic: the big name, then the Front-end and Databases skill cards.
+- Pure CSS animation (no script, no video, so it works the same on every browser). With `prefers-reduced-motion`, only the first image is shown.
+- Shorter tagline so both cards fit above the fold on a laptop screen.
+- To refresh the pictures after a visual change, capture the scenes again (the cards use `assets/landing/immersive-1..4.webp` and `classic-1..3.webp`, 1200x900).

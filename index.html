@@ -7,7 +7,7 @@
 <meta name="description" content="Portfolio d'Annabelle Megy, ancienne agente de voyage devenue développeuse full-stack. Choisissez la version immersive en 3D ou la version classique.">
 <meta property="og:title" content="Annabelle Megy · Portfolio">
 <meta property="og:description" content="Ancienne agente de voyage, future développeuse full-stack. Version immersive en 3D ou version classique.">
-<meta property="og:image" content="v6/assets/airport-terminal-home.webp">
+<meta property="og:image" content="assets/landing/immersive-1.webp">
 <meta name="theme-color" content="#0b0e14">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,35 +37,33 @@ a { color: inherit; }
 
 .hero { padding: clamp(14px, 4vh, 44px) 0 clamp(10px, 2vh, 22px); }
 .kicker { margin: 0 0 14px; font: 600 11px var(--f-mono); letter-spacing: .18em; text-transform: uppercase; color: var(--amber); }
-h1 { margin: 0 0 12px; font: 800 clamp(40px, 7vw, 78px)/.95 var(--f-display); letter-spacing: -.03em; }
-.sub { margin: 0; max-width: 34em; font-size: clamp(17px, 2vw, 22px); color: rgba(255,255,255,.86); text-wrap: balance; }
+h1 { margin: 0 0 10px; font: 800 clamp(38px, 6vw, 66px)/.95 var(--f-display); letter-spacing: -.03em; }
+.sub { margin: 0; max-width: 34em; font-size: clamp(16px, 1.8vw, 20px); color: rgba(255,255,255,.86); text-wrap: balance; }
 .ask { margin: clamp(16px, 3vh, 30px) 0 14px; font: 600 12px var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
 
 .choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.card { position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 12px; min-height: clamp(270px, 40vh, 380px); padding: clamp(20px, 3vw, 32px); border-radius: 22px; overflow: hidden; text-decoration: none; isolation: isolate; border: 1px solid var(--line); transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .25s, box-shadow .35s; }
+.card { position: relative; display: flex; flex-direction: column; padding: 0; border-radius: 22px; overflow: hidden; text-decoration: none; isolation: isolate; border: 1px solid var(--line); transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .25s, box-shadow .35s; }
 .card:hover, .card:focus-visible { transform: translateY(-4px); border-color: var(--amber); box-shadow: 0 24px 60px rgba(0,0,0,.45); }
-.card h2 { margin: 0; font: 800 clamp(26px, 3.2vw, 38px)/1.02 var(--f-display); letter-spacing: -.02em; }
+.body { display: flex; flex-direction: column; gap: 10px; padding: clamp(16px, 2.2vw, 24px) clamp(18px, 2.4vw, 26px) clamp(18px, 2.4vw, 26px); }
+.card h2 { margin: 0; font: 800 clamp(24px, 2.8vw, 32px)/1.05 var(--f-display); letter-spacing: -.02em; }
 .card p { margin: 0; max-width: 30em; color: rgba(255,255,255,.84); }
 .meta { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .meta li { padding: .4em .75em; border-radius: 999px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.16); font: 600 11px var(--f-mono); letter-spacing: .04em; }
 .go { display: inline-flex; align-items: center; gap: 10px; align-self: flex-start; margin-top: 4px; padding: .8em 1.3em; border-radius: 999px; background: var(--amber); color: #1a1405; font: 700 14px var(--f-mono); letter-spacing: .02em; transition: background .2s, gap .25s; }
 .card:hover .go, .card:focus-visible .go { background: #ffd570; gap: 14px; }
 
-/* immersif : photo du terminal */
-.immersive { background: #2a2030; }
-.immersive img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 62% 50%; transition: transform .8s cubic-bezier(.2,.8,.2,1); }
-.immersive::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(11,14,20,.15) 0%, rgba(11,14,20,.55) 48%, rgba(11,14,20,.92) 100%); }
-.immersive:hover img, .immersive:focus-visible img { transform: scale(1.05); }
-.badge { align-self: flex-start; margin-bottom: auto; padding: .4em .8em; border-radius: 999px; background: rgba(11,14,20,.7); border: 1px solid rgba(255,255,255,.2); font: 600 11px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--amber); }
-
-/* classique : fiche épurée */
-.classic { background: linear-gradient(160deg, var(--night-2), #0d1119); }
-.classic .sheet { align-self: flex-end; margin-bottom: auto; width: min(46%, 170px); display: grid; gap: 8px; padding: 14px; border-radius: 14px; background: #f5f6f2; box-shadow: 0 18px 40px rgba(0,0,0,.4); transform: rotate(3deg); transition: transform .5s cubic-bezier(.2,.8,.2,1); }
-.classic:hover .sheet, .classic:focus-visible .sheet { transform: rotate(0deg) translateY(-4px); }
-.sheet b { display: block; height: 14px; width: 62%; border-radius: 3px; background: #141b2b; }
-.sheet span { display: block; height: 7px; border-radius: 3px; background: #d9dcd4; }
-.sheet span:nth-child(3) { width: 90%; } .sheet span:nth-child(4) { width: 76%; } .sheet span:nth-child(6) { width: 84%; } .sheet span:nth-child(7) { width: 58%; }
-.sheet i { display: block; height: 22px; width: 44%; border-radius: 999px; background: var(--amber); }
+/* fond des cartes : captures réelles du site, en fondu enchaîné lent (aucun script, aucune vidéo) */
+.shots { background: #12161f; }
+.shots .slides { position: relative; flex: none; aspect-ratio: 5 / 2; overflow: hidden; border-bottom: 1px solid var(--line); }
+.shots .slides img { position: absolute; object-position: 50% 62%; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform-origin: 50% 60%; animation-duration: var(--cycle); animation-iteration-count: infinite; animation-timing-function: ease-in-out; animation-delay: calc(var(--i) * var(--step) - 1s); will-change: opacity, transform; }
+/* cadrage : le grand nom est en haut de la 1re capture classique, les cartes de compétences au milieu des suivantes */
+.classic .slides img:nth-child(1) { object-position: 50% 0%; } .classic .slides img:nth-child(n+2) { object-position: 50% 52%; }
+.shots .slides.n4 { --cycle: 20s; --step: 5s; } .shots .slides.n3 { --cycle: 15s; --step: 5s; }
+.shots .slides.n4 img { animation-name: slide4; } .shots .slides.n3 img { animation-name: slide3; }
+/* 1 s de fondu entrant, 4 s visible (léger zoom), 1 s de fondu sortant, recouvrement avec l'image suivante */
+@keyframes slide4 { 0% { opacity: 0; transform: scale(1); } 5% { opacity: 1; } 25% { opacity: 1; transform: scale(1.06); } 30% { opacity: 0; transform: scale(1.07); } 100% { opacity: 0; transform: scale(1); } }
+@keyframes slide3 { 0% { opacity: 0; transform: scale(1); } 6.67% { opacity: 1; } 33.3% { opacity: 1; transform: scale(1.06); } 40% { opacity: 0; transform: scale(1.07); } 100% { opacity: 0; transform: scale(1); } }
+.shots .slides::after { content: ""; position: absolute; inset: auto 0 0 0; height: 35%; background: linear-gradient(180deg, transparent, rgba(18,22,31,.85)); pointer-events: none; }
 
 .note { margin: 18px 0 0; color: var(--mute); font-size: 14px; }
 .warn { margin: 12px 0 0; padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(255,194,61,.4); background: rgba(255,194,61,.08); color: #ffe3a1; font-size: 14px; }
@@ -76,10 +74,8 @@ h1 { margin: 0 0 12px; font: 800 clamp(40px, 7vw, 78px)/.95 var(--f-display); le
 
 @media (max-width: 760px) {
   .choices { grid-template-columns: 1fr; }
-  .card { min-height: 260px; }
-  .classic .sheet { width: 130px; padding: 11px; }
 }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } .shots .slides img { animation: none !important; transform: none; } .shots .slides img:first-child { opacity: 1; } }
 </style>
 </head>
 <body>
@@ -98,20 +94,32 @@ h1 { margin: 0 0 12px; font: 800 clamp(40px, 7vw, 78px)/.95 var(--f-display); le
 
     <p class="ask" data-t="ask"></p>
     <div class="choices">
-      <a class="card immersive" id="go-immersive" href="v6/#immersive" data-mode="immersive">
-        <img src="v6/assets/airport-terminal-home.webp" alt="" width="1600" height="900" loading="eager" decoding="async">
-        <span class="badge" data-t="rec"></span>
+      <a class="card shots immersive" id="go-immersive" href="v6/#immersive" data-mode="immersive">
+        <div class="slides n4" aria-hidden="true">
+          <img src="assets/landing/immersive-1.webp" alt="" width="1200" height="900" decoding="async" style="--i:0">
+          <img src="assets/landing/immersive-2.webp" alt="" width="1200" height="900" decoding="async" style="--i:1">
+          <img src="assets/landing/immersive-3.webp" alt="" width="1200" height="900" decoding="async" style="--i:2">
+          <img src="assets/landing/immersive-4.webp" alt="" width="1200" height="900" decoding="async" style="--i:3">
+        </div>
+        <div class="body">
         <h2 data-t="iTitle"></h2>
         <p data-t="iText"></p>
         <ul class="meta"><li data-t="iM1"></li><li data-t="iM2"></li><li data-t="iM3"></li></ul>
         <span class="go"><span data-t="iGo"></span> <span aria-hidden="true">→</span></span>
+        </div>
       </a>
-      <a class="card classic" id="go-classic" href="v6/#classic" data-mode="classic">
-        <div class="sheet" aria-hidden="true"><b></b><span></span><span></span><span></span><i></i><span></span><span></span></div>
+      <a class="card shots classic" id="go-classic" href="v6/#classic" data-mode="classic">
+        <div class="slides n3" aria-hidden="true">
+          <img src="assets/landing/classic-1.webp" alt="" width="1200" height="900" decoding="async" style="--i:0">
+          <img src="assets/landing/classic-2.webp" alt="" width="1200" height="900" decoding="async" style="--i:1">
+          <img src="assets/landing/classic-3.webp" alt="" width="1200" height="900" decoding="async" style="--i:2">
+        </div>
+        <div class="body">
         <h2 data-t="cTitle"></h2>
         <p data-t="cText"></p>
         <ul class="meta"><li data-t="cM1"></li><li data-t="cM2"></li><li data-t="cM3"></li></ul>
         <span class="go"><span data-t="cGo"></span> <span aria-hidden="true">→</span></span>
+        </div>
       </a>
     </div>
     <p class="warn" id="warn" hidden data-t="noGl"></p>
@@ -141,9 +149,8 @@ h1 { margin: 0 0 12px; font: 800 clamp(40px, 7vw, 78px)/.95 var(--f-display); le
   var T = {
     fr: {
       kicker: "Recherche alternance M1 / M2 · Dév. full-stack",
-      sub: "Ancienne agente de voyage, future développeuse full-stack. Quinze ans à organiser les voyages des autres, aujourd'hui je construis des applications web.",
+      sub: "Ancienne agente de voyage, future développeuse full-stack.",
       ask: "Comment voulez-vous découvrir mon portfolio ?",
-      rec: "Recommandé",
       iTitle: "Version immersive", iText: "Embarquez à l'aéroport de Bordeaux, choisissez un vol et parcourez cinq pays en scooter. Chaque ville raconte une partie de mon parcours.",
       iM1: "3D", iM2: "Son", iM3: "Ordinateur ou tablette", iGo: "Embarquer",
       cTitle: "Version classique", cText: "Une page claire et rapide : parcours, compétences, expériences, projets et contact. Idéale pour tout lire en quelques minutes.",
@@ -154,9 +161,8 @@ h1 { margin: 0 0 12px; font: 800 clamp(40px, 7vw, 78px)/.95 var(--f-display); le
     },
     en: {
       kicker: "Seeking work-study M1 / M2 · Full-stack dev",
-      sub: "Former travel agent, future full-stack developer. Fifteen years organising other people's trips, now I build web applications.",
+      sub: "Former travel agent, future full-stack developer.",
       ask: "How would you like to explore my portfolio?",
-      rec: "Recommended",
       iTitle: "Immersive version", iText: "Board at Bordeaux airport, pick a flight and ride a scooter through five countries. Each city tells part of my story.",
       iM1: "3D", iM2: "Sound", iM3: "Desktop or tablet", iGo: "Take off",
       cTitle: "Classic version", cText: "A clear, fast page: background, skills, experience, projects and contact. Perfect to read everything in a few minutes.",
