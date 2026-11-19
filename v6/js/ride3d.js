@@ -42,7 +42,10 @@ const Ride3D = (() => {
   function buildChunk(key) {
     if (chunks.has(key)) return chunks.get(key);
     const data = key[0] === "r" ? buildRingChunk(NET.sections[+key.slice(1)]) : buildSpokeChunk(NET.spokes[+key.slice(1)]);
-    const c = { main: GLR.mesh(data.mb), bg: GLR.mesh(data.bg), water: GLR.mesh(data.water), signs: data.signs.map(signGPU), bm: bbox(data.mb), bb: bbox(data.bg), bw: bbox(data.water) };
+    const c = { signs: data.signs.map(signGPU) };
+    c.mainItems = GLR.meshCells(data.mb, 48).map((q) => ({ mesh: q.mesh, b: q.b }));                          // v6.49 : cellules de 48 m, écartées par le culling
+    c.bgItems = GLR.meshCells(data.bg, 96).map((q) => ({ mesh: q.mesh, b: q.b, fog: .5, shadow: false }));
+    c.waterItems = GLR.meshCells(data.water, 96).map((q) => ({ mesh: q.mesh, b: q.b, spec: 0, shadow: false }));
     chunks.set(key, c); return c;
   }
   let visKey = null, visVal = null;
@@ -183,7 +186,7 @@ const Ride3D = (() => {
     }
     const cur = P.path === "ring" ? NET.secAt(P.s).index : -1, nb = new Set(cur < 0 ? [] : [cur, (cur + 1) % NET.sections.length]);
     if (F) { items.push({ mesh: seaMesh, spec: 0, shadow: false }); env.fogN = 380; env.fogF = 2600; }
-    for (const k of (F ? chunks.keys() : visible())) { const c = chunks.get(k); if (!c) continue; items.push({ mesh: c.main, b: c.bm }, { mesh: c.water, b: c.bw, spec: 0, shadow: false }); if (F || k[0] !== "r" || nb.has(+k.slice(1))) items.push({ mesh: c.bg, b: c.bb, fog: .5, shadow: false }); signs.push(...c.signs); }
+    for (const k of (F ? chunks.keys() : visible())) { const c = chunks.get(k); if (!c) continue; for (const q of c.mainItems) items.push(q); for (const q of c.waterItems) items.push(q); if (F || k[0] !== "r" || nb.has(+k.slice(1))) for (const q of c.bgItems) items.push(q); signs.push(...c.signs); }
     items.push({ mesh: rider, m: rm, spec: .3 });
     if (chuteM) items.push({ mesh: chute, m: chuteM, spec: .1 });
     if (P.path !== "ring" && NET.spokes[P.path].door) {
@@ -215,7 +218,7 @@ const Ride3D = (() => {
     if (PERF) { if (!perfEl) { perfEl = document.createElement("div"); perfEl.style.cssText = "position:fixed;z-index:99;left:8px;top:70px;padding:4px 8px;background:#000c;color:#0f0;font:12px monospace;pointer-events:none"; document.body.appendChild(perfEl); }
       if (now - perfT > 500) { perfT = now; perfEl.textContent = Math.round(1000 / ema) + " fps · " + canvas.width + "×" + canvas.height + " · échelle " + rscale.toFixed(2); } }
     if (!fly && !(P.mode === "hall")) {   // rien n'est ajusté pendant les cinématiques
-      if (ema > 20) { if (++slow > 12 && rscale > .4) { rscale = Math.max(.4, rscale * .85); slow = 0; ema = 16.7; resize(); } } else slow = 0;
+      if (ema > 20) { if (++slow > 12 && rscale > .5) { rscale = Math.max(.5, rscale * .85); slow = 0; ema = 16.7; resize(); } } else slow = 0;
     }
     const raw = Math.min(.05, Math.max(.001, el / 1000 || dtS)); last = now;
     dtS += (raw - dtS) * .2; // pas de temps lissé : mouvement régulier même si une image arrive en retard

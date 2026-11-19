@@ -340,6 +340,35 @@ const GLR = (() => {
     return { vao, vb, ib, count: mb.i.length, dispose() { gl.deleteBuffer(vb); gl.deleteBuffer(ib); gl.deleteVertexArray(vao); } };
   }
 
+  /* v6.49 : découpe un maillage en cellules carrées de `cell` mètres (au sol) pour que le culling puisse écarter
+     ce qui est hors champ ou hors de la zone d'ombre. Les sommets sont partagés, seuls les index sont répartis.
+     Renvoie [{ mesh, b }] avec b = boîte englobante [x0,x1,y0,y1,z0,z1]. */
+  function meshCells(mb, cell = 48) {
+    if (!mb || !mb.n || !mb.i.length) return [];
+    const v = mb.v, ix = mb.i, groups = new Map();
+    for (let t = 0; t < ix.length; t += 3) {
+      const a = ix[t] * 11, b = ix[t + 1] * 11, c = ix[t + 2] * 11;
+      const key = (Math.floor((v[a] + v[b] + v[c]) / (3 * cell)) + 4096) * 8192 + Math.floor((v[a + 2] + v[b + 2] + v[c + 2]) / (3 * cell)) + 4096;
+      let o = groups.get(key); if (!o) groups.set(key, o = { idx: [], b: [1e9, -1e9, 1e9, -1e9, 1e9, -1e9] });
+      o.idx.push(ix[t], ix[t + 1], ix[t + 2]);
+      for (const q of [a, b, c]) { const x = v[q], y = v[q + 1], z = v[q + 2], bb = o.b; if (x < bb[0]) bb[0] = x; if (x > bb[1]) bb[1] = x; if (y < bb[2]) bb[2] = y; if (y > bb[3]) bb[3] = y; if (z < bb[4]) bb[4] = z; if (z > bb[5]) bb[5] = z; }
+    }
+    const vb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, vb); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(v), gl.STATIC_DRAW);
+    let refs = groups.size;
+    return [...groups.values()].map((o) => {
+      const vao = gl.createVertexArray(); gl.bindVertexArray(vao); gl.bindBuffer(gl.ARRAY_BUFFER, vb);
+      gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 44, 0);
+      gl.enableVertexAttribArray(1); gl.vertexAttribPointer(1, 3, gl.FLOAT, false, 44, 12);
+      gl.enableVertexAttribArray(2); gl.vertexAttribPointer(2, 4, gl.FLOAT, false, 44, 24);
+      gl.enableVertexAttribArray(4); gl.vertexAttribPointer(4, 1, gl.FLOAT, false, 44, 40);
+      gl.vertexAttrib2f(3, 0, 0);
+      const ib = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(o.idx), gl.STATIC_DRAW);
+      gl.bindVertexArray(null);
+      const bb = o.b;
+      return { mesh: { vao, ib, count: o.idx.length, dispose() { gl.deleteBuffer(ib); gl.deleteVertexArray(vao); if (--refs === 0) gl.deleteBuffer(vb); } }, b: [bb[0] - 1, bb[1] + 1, bb[2] - 1, bb[3] + 1, bb[4] - 1, bb[5] + 1] };
+    });
+  }
+
   /* quad texturé (panneaux) : w × h, centré en x, posé en y=0, face +z */
   function texQuad(w, h) {
     const vao = gl.createVertexArray(); gl.bindVertexArray(vao);
@@ -424,7 +453,7 @@ const GLR = (() => {
   }
   const IDM = M4.id();
 
-  return { init, setQuality(o) { Object.assign(Q, o); }, mesh, texQuad, texture, delTex, render, cloudLayer, drawClouds, get gl() { return gl; } };
+  return { init, setQuality(o) { Object.assign(Q, o); }, mesh, meshCells, texQuad, texture, delTex, render, cloudLayer, drawClouds, get gl() { return gl; } };
 })();
 
 /* ---------- Textes en texture ---------- */

@@ -31,13 +31,15 @@ Requirements: Python 3, NumPy, scikit-image (`pip install numpy scikit-image`).
 | `scooter_import.py` | Imports `scooter_retro.glb`: flips it to face +z, scales it (wheelbase about 1.26 m) and renames materials |
 | `people_sdf.py` | Hall travellers, as groups of `name__part` nodes |
 | `gen_hall.py` | Rewrites the `<svg id="hallSvg">` block of `index.html` (hall seen from outside, then inside) |
+| `decimate_glb.py` | Simplifies a GLB by vertex clustering (`python3 tools/decimate_glb.py in.glb out.glb 0.16`). Used on `rider.glb`: 189 252 → 26 312 triangles, 3.7 MB → 0.6 MB |
 | `build_single.py` | Builds the one-file release (see [DEPLOYMENT.md](DEPLOYMENT.md)) |
 
 Coordinate convention: glTF, `x` = side, `y` = up, `z` = forward.
 
 ```bash
 cd v6
-python3 tools/rider_sdf.py     # writes models/rider.glb
+python3 tools/rider_sdf.py     # writes models/rider.glb (full resolution, about 190k triangles)
+python3 tools/decimate_glb.py models/rider.glb models/rider.glb 0.16   # then simplify it for the web
 python3 tools/people_sdf.py    # writes models/people.glb
 python3 tools/gen_hall.py      # rewrites the hall SVG in index.html
 ```

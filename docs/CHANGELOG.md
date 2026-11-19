@@ -32,3 +32,9 @@ Only `v6/` is present in this repository. Earlier versions were separate folders
 - **Cached visible-chunk set** instead of rebuilding it every frame.
 - **Frame counter:** add `?perf` to the URL to show fps, canvas size and the resolution scale.
 - **Minimap simplified:** larger monuments, small plates with only the country name and flag, no compass or stamp, more margin so nothing is cut.
+
+### v6.49 (continued)
+
+- **Rider model simplified** from 189 252 to 26 312 triangles (3.7 MB to 0.6 MB). It was drawn twice per frame (scene and shadow) while covering a tiny part of the screen. New tool: `tools/decimate_glb.py`.
+- **Scenery chunks split into 48 m cells** (`GLR.meshCells`), so culling removes whatever is out of view or out of the shadow box. Triangles per frame went from about 1.3 million to about 0.7 million.
+- Adaptive resolution floor raised to 50 %.
