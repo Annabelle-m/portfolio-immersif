@@ -178,14 +178,16 @@ const GLR = (() => {
   uniform vec3 uSun, uSunC, uSky, uGnd, uFog, uCam, uTopC, uHorC; uniform float uFogN, uFogF, uFogA, uSpec, uEmis, uExpo, uTex, uTexLight, uTime;
   uniform sampler2DShadow uSh; uniform sampler2D uT; uniform float uShOn, uTexel; uniform int uTaps;
   vec3 lin(vec3 c){ return pow(c, vec3(2.2)); }
+  float gFar = 0.;
   float h3(vec3 p){ p = fract(p * .3183099 + .1); p *= 17.; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
-  float n3(vec3 x){ vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. * f);
+  float n3(vec3 x){ if (gFar > .5) return .5; vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. * f);
     return mix(mix(mix(h3(i), h3(i + vec3(1,0,0)), f.x), mix(h3(i + vec3(0,1,0)), h3(i + vec3(1,1,0)), f.x), f.y),
                mix(mix(h3(i + vec3(0,0,1)), h3(i + vec3(1,0,1)), f.x), mix(h3(i + vec3(0,1,1)), h3(i + vec3(1,1,1)), f.x), f.y), f.z); }
-  float fbm(vec3 p){ float s = 0., a = .5; for (int i = 0; i < 3; i++) { s += a * n3(p); p *= 2.03; a *= .5; } return s * 1.14; }
+  float fbm(vec3 p){ if (gFar > .5) return .5; float s = 0., a = .5; for (int i = 0; i < 3; i++) { s += a * n3(p); p *= 2.03; a *= .5; } return s * 1.14; }
   const vec2 PD[12] = vec2[12](vec2(-.326,-.406), vec2(-.840,-.074), vec2(-.696,.457), vec2(-.203,.621), vec2(.962,-.195), vec2(.473,-.480), vec2(.519,.767), vec2(.185,-.893), vec2(.507,.064), vec2(.896,.412), vec2(-.322,-.933), vec2(-.792,-.598));
   vec3 skyRef(vec3 r){ vec3 top = lin(uTopC), hor = lin(uHorC); return r.y > 0. ? mix(hor, top, pow(clamp(r.y * 1.4, 0., 1.), .7)) : hor * mix(.55, .35, clamp(-r.y * 3., 0., 1.)); }
   void main(){
+    gFar = step(85., length(vW - uCam));
     vec3 n = normalize(vN); vec3 v = normalize(uCam - vW); if (dot(n, v) < 0.) n = -n;
     vec3 base; float em = vC.a; int m = int(vM + .5); vec3 wp = vW;
     if (uTex > .5) { vec4 t = texture(uT, vUV); if (t.a < .4) discard; base = lin(t.rgb); em = uTexLight; m = 0; } else base = lin(vC.rgb);
@@ -391,12 +393,6 @@ const GLR = (() => {
     }
     gl.viewport(0, 0, W, H);
     gl.clearColor(env.fog[0], env.fog[1], env.fog[2], 1); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    // ciel
-    gl.disable(gl.DEPTH_TEST); gl.useProgram(progSky.p); const su = progSky.u;
-    gl.uniformMatrix4fv(su.uIVP, false, M4.inv(cam.vp)); gl.uniform3fv(su.uCam, cam.eye); gl.uniform3fv(su.uSunDir, env.sunDir);
-    gl.uniform3fv(su.uTop, env.skyTop); gl.uniform3fv(su.uMid, env.skyMid); gl.uniform3fv(su.uHor, env.skyHor); gl.uniform3fv(su.uSunC, env.sunGlow); gl.uniform3fv(su.uCloud, env.cloud);
-    gl.uniform1f(su.uStars, env.stars); gl.uniform1f(su.uSunVis, env.sunVis); gl.uniform1f(su.uTime, time); gl.uniform1f(su.uClouds, env.clouds); gl.uniform1f(su.uMoon, env.moon || 0);
-    gl.bindVertexArray(skyVAO); gl.drawArrays(gl.TRIANGLES, 0, 3);
     // scène
     gl.enable(gl.DEPTH_TEST); gl.enable(gl.CULL_FACE); gl.cullFace(gl.BACK); gl.disable(gl.CULL_FACE);
     gl.useProgram(progMain.p); const u = progMain.u;
@@ -417,6 +413,13 @@ const GLR = (() => {
       gl.bindVertexArray(s.q.vao); gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_INT, 0);
     }
     gl.activeTexture(gl.TEXTURE0);
+    // ciel (v6.49 : après la scène, test de profondeur : seuls les pixels non couverts sont calculés)
+    gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LEQUAL); gl.depthMask(false); gl.disable(gl.CULL_FACE); gl.useProgram(progSky.p); const su = progSky.u;
+    gl.uniformMatrix4fv(su.uIVP, false, M4.inv(cam.vp)); gl.uniform3fv(su.uCam, cam.eye); gl.uniform3fv(su.uSunDir, env.sunDir);
+    gl.uniform3fv(su.uTop, env.skyTop); gl.uniform3fv(su.uMid, env.skyMid); gl.uniform3fv(su.uHor, env.skyHor); gl.uniform3fv(su.uSunC, env.sunGlow); gl.uniform3fv(su.uCloud, env.cloud);
+    gl.uniform1f(su.uStars, env.stars); gl.uniform1f(su.uSunVis, env.sunVis); gl.uniform1f(su.uTime, time); gl.uniform1f(su.uClouds, env.clouds); gl.uniform1f(su.uMoon, env.moon || 0);
+    gl.bindVertexArray(skyVAO); gl.drawArrays(gl.TRIANGLES, 0, 3);
+    gl.depthMask(true); gl.depthFunc(gl.LESS);
     gl.bindVertexArray(null);
   }
   const IDM = M4.id();

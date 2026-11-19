@@ -45,7 +45,13 @@ const Ride3D = (() => {
     const c = { main: GLR.mesh(data.mb), bg: GLR.mesh(data.bg), water: GLR.mesh(data.water), signs: data.signs.map(signGPU), bm: bbox(data.mb), bb: bbox(data.bg), bw: bbox(data.water) };
     chunks.set(key, c); return c;
   }
+  let visKey = null, visVal = null;
   function visible() {
+    const key = fly ? null : P.path + ":" + (P.path === "ring" ? Math.floor(P.s / 8) : 0);
+    if (key && key === visKey) return visVal;
+    const v = visible0(); visKey = key; visVal = v; return v;
+  }
+  function visible0() {
     if (fly) { const a = visibleAt(fly.s0), b = visibleAt(fly.s1); b.forEach((k) => a.add(k)); (fly.mid || []).forEach((k) => a.add(k)); return a; }
     return visibleAt(P.path === "ring" ? P.s : null);
   }
@@ -193,10 +199,10 @@ const Ride3D = (() => {
     snowCtx.fillStyle = `rgba(255,255,255,${.85 * a})`;
     for (const f of snow) { const x = ((f[0] * W + time * 25 * f[2] - P.x * 40) % W + W) % W, y = ((f[1] + time * .1 * f[2] + P.s * .0004) % 1) * H; snowCtx.beginPath(); snowCtx.arc(x, y, 1.6 * f[2] * (W / 1400 + .6), 0, 6.3); snowCtx.fill(); }
   }
-  const COARSE = matchMedia("(pointer: coarse)").matches;
+  const COARSE = matchMedia("(pointer: coarse)").matches, PERF = /[?&]perf/.test(location.search); let perfEl = null, perfT = 0;
   let rscale = COARSE ? .8 : 1, slow = 0, fast = 0, ema = 16.7;   // v6.48 : échelle de résolution adaptative
   function resize() {
-    const r = canvas.getBoundingClientRect(), dpr = Math.max(.5, Math.min(window.devicePixelRatio || 1, r.width > 900 ? 1.25 : 1.5) * rscale);
+    const r = canvas.getBoundingClientRect(), dpr = Math.max(.5, Math.min(window.devicePixelRatio || 1, r.width > 900 ? 1 : 1.25) * rscale);
     canvas.width = Math.max(2, Math.round(r.width * dpr)); canvas.height = Math.max(2, Math.round(r.height * dpr));
     if (snowCv) { snowCv.width = canvas.width; snowCv.height = canvas.height; }
   }
@@ -206,8 +212,10 @@ const Ride3D = (() => {
     const el = now - last;
     if (el < 12) return;   // écrans 120 Hz : on ne dessine qu'une image sur deux (60 i/s suffisent)
     ema += (Math.min(el, 100) - ema) * .1;
+    if (PERF) { if (!perfEl) { perfEl = document.createElement("div"); perfEl.style.cssText = "position:fixed;z-index:99;left:8px;top:70px;padding:4px 8px;background:#000c;color:#0f0;font:12px monospace;pointer-events:none"; document.body.appendChild(perfEl); }
+      if (now - perfT > 500) { perfT = now; perfEl.textContent = Math.round(1000 / ema) + " fps · " + canvas.width + "×" + canvas.height + " · échelle " + rscale.toFixed(2); } }
     if (!fly && !(P.mode === "hall")) {   // rien n'est ajusté pendant les cinématiques
-      if (ema > 24) { if (++slow > 20 && rscale > .5) { rscale = Math.max(.5, rscale * .85); slow = 0; ema = 16.7; resize(); } } else slow = 0;
+      if (ema > 20) { if (++slow > 12 && rscale > .4) { rscale = Math.max(.4, rscale * .85); slow = 0; ema = 16.7; resize(); } } else slow = 0;
     }
     const raw = Math.min(.05, Math.max(.001, el / 1000 || dtS)); last = now;
     dtS += (raw - dtS) * .2; // pas de temps lissé : mouvement régulier même si une image arrive en retard

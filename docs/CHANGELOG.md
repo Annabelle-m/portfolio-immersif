@@ -23,3 +23,12 @@ Only `v6/` is present in this repository. Earlier versions were separate folders
 - **No `backdrop-filter` over the 3D view.** Blurring a live WebGL canvas is very expensive. The HUD backgrounds are slightly more opaque instead.
 - **Lighter minimap.** The blur and shadow SVG filters are gone, and the speed and minimap DOM updates run at about 15 Hz instead of every frame.
 - **Classic page loop** no longer runs while the 3D view is shown.
+
+## v6.49: lighter sky and shaders, cleaner minimap
+
+- **Sky drawn last.** It was a full-screen cloud shader drawn before the scene. It now runs after the scene and only on pixels the scene did not cover (depth test).
+- **Noise skipped at a distance.** Procedural material noise is disabled beyond 85 m, where it is invisible but covers most of the screen.
+- **Lower default resolution on desktop** (device pixel ratio capped at 1.0) and a more reactive adaptive scale (drops from about 50 fps, down to 40%).
+- **Cached visible-chunk set** instead of rebuilding it every frame.
+- **Frame counter:** add `?perf` to the URL to show fps, canvas size and the resolution scale.
+- **Minimap simplified:** larger monuments, small plates with only the country name and flag, no compass or stamp, more margin so nothing is cut.

@@ -208,9 +208,9 @@
 
   /* ---------- Mini-carte : la boucle des mondes autour de l'aéroport ---------- */
   const MMR = 60;   // rayon de la route (carte illustrée)
-  const MM_LAY = [  // france, usa, japan, australia, namibia : monument + plaque
-    { lx: -30, ly: -92, px: 52, py: -98 }, { lx: 118, ly: -62, px: 126, py: 4 }, { lx: 112, ly: 42, px: 118, py: 96 },
-    { lx: -112, ly: 42, px: -118, py: 96 }, { lx: -118, ly: -62, px: -126, py: 4 }];
+  const MM_LAY = [  // france, usa, japan, australia, namibia : monument (lx,ly) + petite plaque (px,py)
+    { lx: -8, ly: -110, px: 94, py: -128 }, { lx: 128, ly: -58, px: 128, py: 2 }, { lx: 114, ly: 52, px: 118, py: 116 },
+    { lx: -114, ly: 52, px: -118, py: 116 }, { lx: -128, ly: -58, px: -128, py: 2 }];
   const MM_ICO = { about: "👤", skills: "</>", experience: "💼", projects: "📁", contact: "✉️" };
   const MM_FLAG = {
     france: `<rect width="6" height="12" fill="#2b4fa8"/><rect x="6" width="6" height="12" fill="#fff"/><rect x="12" width="6" height="12" fill="#d8322f"/>`,
@@ -234,10 +234,7 @@
     // la boucle est étirée en 5 secteurs égaux de 72° (un par monde) pour que plaques et scooter restent alignés
     mmSec = WORLDS.map((w) => { const m = secs.filter((s) => s.world.id === w.id); return [m[0].start / total, m[m.length - 1].end / total]; });
     let out = `<defs><filter id="mmGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.2"/></filter><filter id="mmWob" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="9"/></filter><filter id="mmSh" x="-10%" y="-10%" width="120%" height="125%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#000" flood-opacity=".45"/></filter><linearGradient id="mmPap" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e8c9"/><stop offset="1" stop-color="#e8cfa0"/></linearGradient></defs>`;
-    out += `<circle r="76" class="mp-mbg"/><g class="mp-bgw"><rect x="-180" y="-128" width="360" height="262" rx="30" class="mp-bg"/></g>`;
-    // décor : boussole + tampon
-    out += `<g class="mp-deco" transform="translate(-148 -100)" opacity=".75"><circle r="16" fill="none" stroke="#cfd6e6" stroke-width="1.2"/><path d="M0-17L4 0 0 17-4 0z" fill="#cfd6e6"/><path d="M-17 0L0 3 17 0 0-3z" fill="#8f9bb5"/><text y="-19" text-anchor="middle" class="mp-sm">N</text></g>`;
-    out += `<g class="mp-deco" transform="translate(146 -100) rotate(-8)" opacity=".7"><circle r="19" fill="none" stroke="#cfd6e6" stroke-width="1.6" stroke-dasharray="3 2"/><circle r="14" fill="none" stroke="#cfd6e6" stroke-width="1"/><text y="5" text-anchor="middle" font-size="15" fill="#cfd6e6">✈</text></g>`;
+    out += `<circle r="76" class="mp-mbg"/><g class="mp-bgw"><rect x="-186" y="-162" width="372" height="302" rx="26" class="mp-bg"/></g>`;
     // globe central (continents stylisés)
     out += `<circle r="48" fill="#161c2c" stroke="rgba(255,255,255,.14)" stroke-width="1.2" stroke-dasharray="2 3"/><g fill="rgba(255,255,255,.13)"><path d="M-36-14Q-30-30-12-28L-4-18-14-6-22 6-32 2z"/><path d="M-16 8L-4 10 0 28-8 40-16 24z"/><path d="M4-26Q18-32 30-24L34-8 20-4 10-12z"/><path d="M8-2L22-2 26 16 18 30 8 18z"/><path d="M28 12L38 14 36 24 28 22z"/></g>`;
     // route + piste parcourue
@@ -245,12 +242,12 @@
     WORLDS.forEach((w, i) => { const r = (d) => pt(d, MMR), [x0, y0] = r(-126 + 72 * i + 2), [x1, y1] = r(-126 + 72 * (i + 1) - 2); out += `<path d="M${x0} ${y0} A${MMR} ${MMR} 0 0 1 ${x1} ${y1}" stroke="${w.accent}" class="mp-glow"/><path d="M${x0} ${y0} A${MMR} ${MMR} 0 0 1 ${x1} ${y1}" stroke="${w.accent}" class="mp-arc"/>`; });
     out += `<circle id="mmTrail" r="${MMR}" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="0 400" transform="rotate(-126)" opacity=".9"/>`;
     WORLDS.forEach((w, i) => {
-      const L0 = MM_LAY[i], deg = -90 + 72 * i, [nx, ny] = pt(deg, MMR), tri = NET.triggers.findIndex((tr) => tr.sec.world.id === w.id), nm = esc(L(w.country)), lb = esc(L(w.label)), pw = Math.max(92, nm.length * 7.6 + 42, lb.length * 6.4 + 38);
+      const L0 = MM_LAY[i], deg = -90 + 72 * i, [nx, ny] = pt(deg, MMR), tri = NET.triggers.findIndex((tr) => tr.sec.world.id === w.id), nm = esc(L(w.country)), lb = esc(L(w.label)), pw = Math.max(74, nm.length * 7.4 + 38);
       out += `<g class="mp-w" data-w="${w.id}" data-mm="${tri}" tabindex="0" role="button" aria-label="${nm} · ${lb}" style="--c:${w.accent}">`;
-      out += `<g transform="translate(${L0.lx} ${L0.ly}) scale(.95)" class="mp-art">${MM_ART[w.id]}</g>`;
-      out += `<g transform="translate(${L0.px} ${L0.py})" class="mp-plate"><rect x="${-pw / 2}" y="-19" width="${pw}" height="38" rx="12"/>`;
-      out += `<g transform="translate(${pw / 2 - 27} -14) scale(1.15)"><g>${MM_FLAG[w.id]}</g></g>`;
-      out += `<text x="${-pw / 2 + 10}" y="-3" class="mp-c">${nm}</text><text x="${-pw / 2 + 10}" y="12" class="mp-s">${MM_ICO[w.section]} ${lb}</text></g></g>`;
+      out += `<g transform="translate(${L0.lx} ${L0.ly}) scale(1.25)" class="mp-art">${MM_ART[w.id]}</g>`;
+      out += `<g transform="translate(${L0.px} ${L0.py})" class="mp-plate"><rect x="${-pw / 2}" y="-13" width="${pw}" height="26" rx="9"/>`;
+      out += `<g transform="translate(${pw / 2 - 25} -6) scale(1.05)"><g>${MM_FLAG[w.id]}</g></g>`;
+      out += `<text x="${-pw / 2 + 9}" y="4.5" class="mp-c">${nm}</text></g></g>`;
     });
     // une pastille par ville sur la route : clic = on y saute
     NET.triggers.forEach((tr, i) => {
@@ -259,7 +256,7 @@
     });
     out += `<g class="mm-home" data-mm="home" tabindex="0" role="button" aria-label="${esc(t("toAirportLong"))}"><circle r="11" class="mm-halo"/><circle r="9" class="mm-hub"/><text y="4" class="mm-hub-t">✈</text></g>`;
     out += `<g id="mmDot" class="mp-dot"><circle r="11" fill="#fff" stroke="#ffb920" stroke-width="2.4"/><g id="mmScoot"><text y="5.6" text-anchor="middle" font-size="15">🛵</text></g>`;
-    svg.setAttribute("viewBox", MM_MOB.matches ? "-76 -76 152 152" : "-186 -135 372 275");
+    svg.setAttribute("viewBox", MM_MOB.matches ? "-76 -76 152 152" : "-192 -168 384 314");
     svg.innerHTML = out; mmActive = null; mmEls = null;
   }
   let mmActive = null, mmSec = [];

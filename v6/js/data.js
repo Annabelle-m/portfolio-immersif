@@ -37,7 +37,7 @@ const UI = {
     postcardSend: "Ouvrir dans ma messagerie", postcardNote: "Le bouton prépare un e-mail dans votre messagerie. Si rien ne s'ouvre, copiez l'adresse ci-dessus.",
     sections: { about: "À propos", journey: "Reconversion", skills: "Compétences", experience: "Expériences", projects: "Projets", contact: "Contact" },
     seeCode: "Code", available: "Disponible pour une alternance M1/M2",
-    flyLines: ["Wiiiii !", "Accrochez-vous !", "Livraison express !", "Raccourci aérien !"], flyChute: "Parachute ouvert ☂", mapHint: "Carte : cliquez une ville pour y sauter"
+    flyLines: ["Wiiiii !", "Accrochez-vous !", "Livraison express !", "Raccourci aérien !"], flyChute: "Parachute ouvert ☂", mapHint: "Cliquez une ville pour y sauter"
   },
   en: {
     departures: "Departures", time: "Time", flight: "Flight", destination: "Destination", gate: "Gate", status: "Status",
@@ -56,7 +56,7 @@ const UI = {
     postcardSend: "Open in my mail app", postcardNote: "The button drafts an email in your mail app. If nothing opens, copy the address above.",
     sections: { about: "About", journey: "Career change", skills: "Skills", experience: "Experience", projects: "Projects", contact: "Contact" },
     seeCode: "Code", available: "Available for a Master's work-study (M1/M2)",
-    flyLines: ["Wheeee!", "Hold on tight!", "Express delivery!", "Air shortcut!"], flyChute: "Parachute open ☂", mapHint: "Map: click a city to jump there"
+    flyLines: ["Wheeee!", "Hold on tight!", "Express delivery!", "Air shortcut!"], flyChute: "Parachute open ☂", mapHint: "Click a city to jump there"
   }
 };
 
