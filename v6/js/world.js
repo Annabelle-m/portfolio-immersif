@@ -545,7 +545,7 @@ const STYLE_BLD = {
   tokyo: ["tokyo"], machiya: ["machiya"], osaka: ["osaka"], nara: ["nara"], snow: ["snow"], sydney: ["tower", "highrise", "tower", "terrace"], melbourne: ["terrace", "tower", "brownstone"],
   queenslander: ["queenslander"], modern: ["modern"], artdeco: ["artdeco"], highrise: ["highrise"], colonial: ["colonial"], outback: [], dunes: []
 };
-const BB = { losangeles: ["HTML5", "CSS", "JavaScript", "Angular", "Node.js", "Swift", "Kotlin", "Unity"], newyork: ["Java", "C#", "Python", "PHP", "TypeScript", "Symfony", "MVC", "Twig"], lasvegas: ["SQL", "MySQL", "MongoDB", "TypeORM", "Merise", "JOIN"], miami: ["Git", "GitHub", "GitLab", "Docker", "Scrum", "Figma", "IA ?"] };
+const BB = { losangeles: ["HTML5", "CSS", "JavaScript", "Angular", "Node.js", "Swift", "Kotlin", "Unity"], newyork: ["Java", "C#", "Python", "PHP", "TypeScript", "Symfony", "MVC", "Twig"], lasvegas: ["SQL", "MySQL", "PostgreSQL", "MongoDB", "TypeORM", "Merise", "JOIN"], miami: ["Git", "GitHub", "GitLab", "Docker", "Scrum", "Figma", "IA ?"] };
 const BBC = ["#ffd84a", "#7ff0d0", "#ffb0c8", "#b0d0ff", "#ffffff"];
 
 function buildCity(sec, a, mb, bg, signs, r) {

@@ -110,3 +110,8 @@ New technologies were added with a neutral description only (no level or project
 
 - `v6/assets/cv/Annabelle_MEGY_CV_FS_M1M2.pdf` replaces the previous CV, which was removed from the repository.
 - "Download my CV" buttons (classic page and 3D contact panel) now use the `download` attribute, so the file is saved instead of opened. The footer link on the choice page still opens it in a new tab.
+
+## v6.58: PostgreSQL and DBeaver
+
+- **PostgreSQL** (marked as used at work) and **DBeaver** added to the Databases city. The Las Vegas billboards list PostgreSQL too.
+- The DBF Automobiles experience and the "Today" line of the About panel now mention JavaScript, MySQL and PostgreSQL, as on the CV.

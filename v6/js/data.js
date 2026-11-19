@@ -75,7 +75,7 @@ const WORLDS = [
             kicker: "Paris · À propos", title: "Bonjour, moi c'est Annabelle.",
             lead: "Développeuse full-stack en alternance, basée à Bordeaux. J'ai passé quinze ans à organiser des voyages avant de passer de l'autre côté de l'écran.",
             items: [
-              ["Aujourd'hui", "En Bachelor Coordinateur de projets informatiques, en alternance chez DBF Automobiles à Bruges (33), sur une stack PHP natif et MySQL."],
+              ["Aujourd'hui", "En Bachelor Coordinateur de projets informatiques, en alternance chez DBF Automobiles à Bruges (33), sur une stack PHP natif, JavaScript, MySQL et PostgreSQL."],
               ["Objectif", "Poursuivre jusqu'au M2 en alternance dans le développement, avec une curiosité forte pour l'IA appliquée au code."],
               ["Ma façon de travailler", "Organisée, autonome, curieuse. J'aime comprendre un besoin avant d'écrire la première ligne."],
               ["Hors écran", "12 ans de gymnastique (dont 5 en sport-études), 18 ans de volley dont 6 au niveau national, et un an en Australie en PVT."]
@@ -86,7 +86,7 @@ const WORLDS = [
             kicker: "Paris · About me", title: "Hi, I'm Annabelle.",
             lead: "Full-stack developer on a work-study programme, based in Bordeaux. I spent fifteen years organising trips before moving to the other side of the screen.",
             items: [
-              ["Today", "Bachelor's in IT project coordination, work-study at DBF Automobiles in Bruges (near Bordeaux), on a plain PHP and MySQL stack."],
+              ["Today", "Bachelor's in IT project coordination, work-study at DBF Automobiles in Bruges (near Bordeaux), on a plain PHP, JavaScript, MySQL and PostgreSQL stack."],
               ["Goal", "Carry on to a Master's (M2) through work-study in development, with a strong interest in AI applied to code."],
               ["How I work", "Organised, autonomous, curious. I like to understand a need before writing the first line."],
               ["Off screen", "12 years of gymnastics (5 in a sports-study programme), 18 years of volleyball including 6 at national level, and a year in Australia on a working holiday visa."]
@@ -161,12 +161,12 @@ const WORLDS = [
         panel: {
           fr: { kicker: "Las Vegas · Données", title: "Bases de données",
             lead: "Je modélise avant de créer les tables, puis j'écris les requêtes.",
-            items: [["MySQL", "Requêtes SQL, jointures et opérations CRUD sur des bases relationnelles."], ["MongoDB", "Base de données NoSQL orientée documents."], ["TypeORM", "ORM pour interroger la base depuis TypeScript."], ["Merise", "MCD puis MLD, pour poser les données avant le code."], ["Outils", "phpMyAdmin au quotidien, Doctrine et ses migrations sous Symfony."]],
-            tags: ["SQL", "MySQL", "MongoDB", "TypeORM", "Merise", "Doctrine", "phpMyAdmin"] },
+            items: [["MySQL", "Requêtes SQL, jointures et opérations CRUD sur des bases relationnelles."], ["PostgreSQL", "Exploitation de bases MySQL et PostgreSQL en alternance."], ["MongoDB", "Base de données NoSQL orientée documents."], ["TypeORM", "ORM pour interroger la base depuis TypeScript."], ["Merise", "MCD puis MLD, pour poser les données avant le code."], ["Outils", "phpMyAdmin au quotidien, DBeaver, Doctrine et ses migrations sous Symfony."]],
+            tags: ["SQL", "MySQL", "PostgreSQL", "MongoDB", "TypeORM", "Merise", "Doctrine", "phpMyAdmin", "DBeaver"] },
           en: { kicker: "Las Vegas · Data", title: "Databases",
             lead: "I model the data before creating tables, then write the queries.",
-            items: [["MySQL", "SQL queries, joins and CRUD operations on relational databases."], ["MongoDB", "Document-oriented NoSQL database."], ["TypeORM", "ORM to query the database from TypeScript."], ["Merise", "Conceptual then logical data models, to settle the data before the code."], ["Tools", "phpMyAdmin day to day, Doctrine and its migrations with Symfony."]],
-            tags: ["SQL", "MySQL", "MongoDB", "TypeORM", "Merise", "Doctrine", "phpMyAdmin"] }
+            items: [["MySQL", "SQL queries, joins and CRUD operations on relational databases."], ["PostgreSQL", "Running MySQL and PostgreSQL databases in my work-study."], ["MongoDB", "Document-oriented NoSQL database."], ["TypeORM", "ORM to query the database from TypeScript."], ["Merise", "Conceptual then logical data models, to settle the data before the code."], ["Tools", "phpMyAdmin day to day, DBeaver, Doctrine and its migrations with Symfony."]],
+            tags: ["SQL", "MySQL", "PostgreSQL", "MongoDB", "TypeORM", "Merise", "Doctrine", "phpMyAdmin", "DBeaver"] }
         }
       },
       {
@@ -193,12 +193,12 @@ const WORLDS = [
         panel: {
           fr: { kicker: "Tokyo · Depuis sept. 2026", title: "DBF Automobiles · Alternante développeuse",
             lead: "Bruges (33). Mon premier poste de développeuse, en parallèle de mon Bachelor.",
-            items: [["Stack", "PHP natif et MySQL."], ["Rythme", "Alternance entreprise / école."], ["Ce que j'y apprends", "Travailler sur du code réel, en production, au sein d'une équipe."]],
-            tags: ["PHP", "MySQL", "Alternance"] },
+            items: [["Stack", "PHP natif et JavaScript, bases MySQL et PostgreSQL."], ["Rythme", "Alternance entreprise / école."], ["Ce que j'y apprends", "Travailler sur du code réel, en production, au sein d'une équipe."]],
+            tags: ["PHP", "JavaScript", "MySQL", "PostgreSQL", "Alternance"] },
           en: { kicker: "Tokyo · Since Sept 2026", title: "DBF Automobiles · Work-study developer",
             lead: "Bruges, near Bordeaux. My first developer role, alongside my Bachelor's.",
-            items: [["Stack", "Plain PHP and MySQL."], ["Rhythm", "Alternating between company and school."], ["What I'm learning", "Working on real production code within a team."]],
-            tags: ["PHP", "MySQL", "Work-study"] }
+            items: [["Stack", "Plain PHP and JavaScript, MySQL and PostgreSQL databases."], ["Rhythm", "Alternating between company and school."], ["What I'm learning", "Working on real production code within a team."]],
+            tags: ["PHP", "JavaScript", "MySQL", "PostgreSQL", "Work-study"] }
         }
       },
       {
