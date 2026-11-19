@@ -21,8 +21,7 @@ const Ride3D = (() => {
   const smooth = (x) => { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); };
 
   /* ---------- Tronçons : tout est construit une fois, on n'affiche que ce qui est proche ---------- */
-  function signGPU(spec) {
-    const lines = spec.linesObj ? [].concat(spec.linesObj[lang]) : spec.lines || [""];
+  function signCanvas(spec, lines) {
     let cnv;
     if (spec.draw === "kangaroo") { cnv = document.createElement("canvas"); cnv.width = cnv.height = 256; const g = cnv.getContext("2d");   // v6.5 : losange droit, silhouette de kangourou
       g.beginPath(); g.moveTo(128, 6); g.lineTo(250, 128); g.lineTo(128, 250); g.lineTo(6, 128); g.closePath(); g.fillStyle = "#f5c518"; g.fill();
@@ -30,9 +29,29 @@ const Ride3D = (() => {
       g.fillStyle = "#111"; g.beginPath(); g.moveTo(206, 150); g.quadraticCurveTo(184, 150, 168, 132); g.quadraticCurveTo(150, 104, 122, 100); g.quadraticCurveTo(108, 98, 98, 86); g.lineTo(96, 68); g.lineTo(90, 80); g.lineTo(86, 66); g.lineTo(82, 82); g.quadraticCurveTo(70, 88, 64, 98); g.lineTo(72, 102); g.quadraticCurveTo(84, 100, 92, 104); g.quadraticCurveTo(96, 112, 104, 118); g.lineTo(96, 132); g.lineTo(86, 136); g.lineTo(88, 141); g.lineTo(101, 138); g.lineTo(112, 124); g.quadraticCurveTo(128, 134, 140, 150); g.lineTo(128, 172); g.lineTo(98, 180); g.lineTo(98, 187); g.lineTo(136, 184); g.lineTo(158, 160); g.quadraticCurveTo(176, 164, 206, 158); g.closePath(); g.fill(); }
     else if (spec.canvas) cnv = spec.canvas();
     else cnv = textCanvas(lines, spec.o || {});
-    const tex = GLR.texture(cnv), q = GLR.texQuad(spec.w, spec.h);
+    return cnv;
+  }
+  /* v6.52 : les panneaux identiques partagent une texture, et celle-ci n'a que la résolution utile (≈160 px par mètre) */
+  const texCache = new Map();
+  function signGPU(spec) {
+    const lines = spec.linesObj ? [].concat(spec.linesObj[lang]) : spec.lines || [""];
+    let tex, key = null;
+    if (spec.canvas) tex = GLR.texture(spec.canvas());
+    else {
+      key = JSON.stringify([lines, spec.o || 0, spec.draw || 0, Math.round(spec.w * 4)]);
+      let e = texCache.get(key);
+      if (!e) {
+        let cnv = signCanvas(spec, lines); const maxW = Math.max(128, Math.round(spec.w * 160));
+        if (cnv.width > maxW) { const k = maxW / cnv.width, c2 = document.createElement("canvas"); c2.width = maxW; c2.height = Math.max(8, Math.round(cnv.height * k)); const g2 = c2.getContext("2d"); g2.imageSmoothingQuality = "high"; g2.drawImage(cnv, 0, 0, c2.width, c2.height); cnv.width = cnv.height = 0; cnv = c2; }
+        e = { tex: GLR.texture(cnv), n: 0 }; cnv.width = cnv.height = 0; texCache.set(key, e);   // le canvas 2D n'est plus utile : on libère sa mémoire tout de suite
+      }
+      e.n++; tex = e.tex;
+    }
+    const q = GLR.texQuad(spec.w, spec.h);
     const m = M4.mul(spec.L.M, M4.trs(spec.x, spec.y, spec.z, spec.back ? Math.PI : 0, 0, spec.rot || 0));
-    return { tex, q, m, light: spec.light, spec };
+    // v6.52 : on ne garde que la matrice du Loc (spec.L référence tout le maillage du décor, soit ~160 Mo de tableaux qui ne pouvaient plus être libérés)
+    const slim = Object.assign({}, spec, { L: { M: spec.L.M } });
+    return { tex, key, q, m, light: spec.light, spec: slim };
   }
   function bbox(mb) {   // boîte englobante [x0,x1,y0,y1,z0,z1] d'un maillage (sommets de 11 flottants, position en tête)
     if (!mb || !mb.v || !mb.v.length) return null; const v = mb.v; let a = 1e9, b = -1e9, c = 1e9, d = -1e9, e = 1e9, f = -1e9;
@@ -41,11 +60,14 @@ const Ride3D = (() => {
   }
   function buildChunk(key) {
     if (chunks.has(key)) return chunks.get(key);
+    const T0 = performance.now();
     const data = key[0] === "r" ? buildRingChunk(NET.sections[+key.slice(1)]) : buildSpokeChunk(NET.spokes[+key.slice(1)]);
+    const T1 = performance.now();
     const c = { signs: data.signs.map(signGPU) };
     c.mainItems = GLR.meshCells(data.mb, 48).map((q) => ({ mesh: q.mesh, b: q.b }));                          // v6.49 : cellules de 48 m, écartées par le culling
     c.bgItems = GLR.meshCells(data.bg, 96).map((q) => ({ mesh: q.mesh, b: q.b, fog: .5, shadow: false }));
     c.waterItems = GLR.meshCells(data.water, 96).map((q) => ({ mesh: q.mesh, b: q.b, spec: 0, shadow: false }));
+    if (PERF) console.log("  " + key + " build " + Math.round(T1 - T0) + " ms, cells+upload " + Math.round(performance.now() - T1) + " ms, verts " + ((data.mb.v.length / 11) | 0));
     chunks.set(key, c); return c;
   }
   let visKey = null, visVal = null;
@@ -69,7 +91,7 @@ const Ride3D = (() => {
   function prebuild(onDone) {
     allKeys = NET.sections.map((_, i) => "r" + i).concat(NET.spokes.map((_, i) => "s" + i));
     const todo = allKeys.filter((k) => !chunks.has(k));
-    const tick = () => { const t0 = performance.now(); while (todo.length && performance.now() - t0 < 10) buildChunk(todo.shift()); if (todo.length) setTimeout(tick, 0); else onDone && onDone(); };
+    const tick = () => { const t0 = performance.now(); while (todo.length && performance.now() - t0 < 10) { const k = todo.shift(), t1 = performance.now(); buildChunk(k); if (PERF) console.log("chunk " + k + " : " + Math.round(performance.now() - t1) + " ms"); } if (todo.length) setTimeout(tick, 0); else onDone && onDone(); };
     tick();
   }
 
@@ -354,7 +376,7 @@ const Ride3D = (() => {
     skipFly() { if (fly) fly.t = fly.dur; },
     skipHall() { if (hall && !hall.done) { hall.done = true; cb.onHall && cb.onHall(); } },
     exitToAirport() { exiting = { t: 0 }; },
-    setLang(l) { lang = l; for (const c of chunks.values()) c.signs = c.signs.map((s) => { if (!s.spec.linesObj) return s; GLR.delTex(s.tex); s.q.dispose(); return signGPU(s.spec); }); },
+    setLang(l) { lang = l; for (const c of chunks.values()) c.signs = c.signs.map((s) => { if (!s.spec.linesObj) return s; s.q.dispose(); if (s.key) { const e = texCache.get(s.key); if (e && --e.n <= 0) { GLR.delTex(e.tex); texCache.delete(s.key); } } else GLR.delTex(s.tex); return signGPU(s.spec); }); },
     jump(secIndex, frac = .5) { const q = NET.sections[secIndex]; P.path = "ring"; P.s = q.start + q.len * frac; P.mode = "drive"; P.v = 0; cooldown = NET.triggers.find((t) => t.sec === q) || null; ensureVisible(); cam.snap = true; },
     jumpSpoke(k, s) { P.path = k; P.s = s; P.dir = 1; P.mode = "drive"; ensureVisible(); cam.snap = true; },
     get state() { return P; }, renderOnce(dt) { render(dt); }, flyTo, get flying() { return !!fly; },

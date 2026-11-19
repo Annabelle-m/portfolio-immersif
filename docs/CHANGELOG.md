@@ -53,3 +53,18 @@ Only `v6/` is present in this repository. Earlier versions were separate folders
 - **`people.glb` simplified** from 103 092 to 11 612 triangles (1.8 MB to 0.2 MB). The six travellers alone cost about 125 000 triangles per pass inside the terminal.
 - **No shadow pass inside the terminal.**
 - The "Skip" button no longer overlaps the speedometer.
+
+## v6.52: memory (the browser was reloading the page)
+
+Safari and Chrome reload a tab that uses too much memory ("This page was reloaded because it was using significant memory"), which sent the visitor back to the start. Measured memory after loading a world:
+
+| | Before | After |
+| --- | --- | --- |
+| JavaScript heap | about 185 MB | about 16 MB |
+| Sign textures | 226 MB (154 textures) | about 110 MB (89 textures, including the 17 MB shadow map) |
+| Geometry buffers | 152 MB | 96 MB |
+
+- **Leak fixed.** Every sign kept a reference to its `Loc`, which holds the whole scenery mesh being built, so about 160 MB of arrays could never be freed. Signs now keep only their matrix.
+- **Shared, right-sized sign textures.** Identical signs share one texture, resolution is capped at about 160 px per metre, and the 2D canvas is released right after upload. This also removes the one-second freezes while scenery chunks were built during the first flight.
+- **Packed vertices** (24 bytes instead of 44): normals and colours as bytes.
+- **Space during the parachute jump.** After clicking a city on the map, that map pin kept the keyboard focus and swallowed Space (it re-triggered a jump). The focus is now released and the pin ignores Space and Esc while flying.

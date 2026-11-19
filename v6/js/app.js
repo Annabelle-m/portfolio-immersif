@@ -278,8 +278,8 @@
     const L2 = UI[lang].flyLines; b.textContent = L2[Math.floor(Math.random() * L2.length)];
     b.classList.add("on"); clearTimeout(onFly.t); onFly.t = setTimeout(() => { b.textContent = UI[lang].flyChute; }, 1500);
   }
-  document.addEventListener("click", (e) => { const g = e.target.closest("[data-mm]"); if (g) { e.preventDefault(); mmGo(g.dataset.mm); } });
-  document.addEventListener("keydown", (e) => { const g = e.target.closest && e.target.closest("[data-mm]"); if (g && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); e.stopPropagation(); mmGo(g.dataset.mm); } }, true);
+  document.addEventListener("click", (e) => { const g = e.target.closest("[data-mm]"); if (g) { e.preventDefault(); mmGo(g.dataset.mm); try { g.blur(); } catch {} } });   // v6.52 : on rend le focus, sinon Espace relançait un saut au lieu de « Passer »
+  document.addEventListener("keydown", (e) => { if (onFly.on && (e.key === " " || e.key === "Escape")) return; const g = e.target.closest && e.target.closest("[data-mm]"); if (g && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); e.stopPropagation(); mmGo(g.dataset.mm); } }, true);
 
   /* ---------- Contrôles ---------- */
   const KEYMAP = { ArrowUp: "up", KeyW: "up", ArrowDown: "down", KeyS: "down", ArrowLeft: "left", KeyA: "left", ArrowRight: "right", KeyD: "right" };

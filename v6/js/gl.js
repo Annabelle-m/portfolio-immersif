@@ -326,14 +326,31 @@ const GLR = (() => {
     return true;
   }
 
+  /* v6.52 : sommets compactés. Le moteur de maillage produit 11 flottants (44 octets) par sommet ; on les envoie en 24 octets :
+     position (3 float), normale (3 octets signés normalisés), couleur + émission (4 octets normalisés), matériau (1 octet). */
+  function packVerts(v) {
+    const n = (v.length / 11) | 0, buf = new ArrayBuffer(n * 24), f = new Float32Array(buf), i8 = new Int8Array(buf), u8 = new Uint8Array(buf);
+    const cl = (x, a, b) => (x < a ? a : x > b ? b : x);
+    for (let i = 0, j = 0; i < n; i++, j += 11) {
+      const o = i * 6, b = i * 24;
+      f[o] = v[j]; f[o + 1] = v[j + 1]; f[o + 2] = v[j + 2];
+      i8[b + 12] = Math.round(cl(v[j + 3], -1, 1) * 127); i8[b + 13] = Math.round(cl(v[j + 4], -1, 1) * 127); i8[b + 14] = Math.round(cl(v[j + 5], -1, 1) * 127);
+      u8[b + 16] = Math.round(cl(v[j + 6], 0, 1) * 255); u8[b + 17] = Math.round(cl(v[j + 7], 0, 1) * 255); u8[b + 18] = Math.round(cl(v[j + 8], 0, 1) * 255); u8[b + 19] = Math.round(cl(v[j + 9], 0, 1) * 255);
+      u8[b + 20] = v[j + 10] | 0;
+    }
+    return buf;
+  }
+  function setMeshAttribs() {
+    gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 24, 0);
+    gl.enableVertexAttribArray(1); gl.vertexAttribPointer(1, 3, gl.BYTE, true, 24, 12);
+    gl.enableVertexAttribArray(2); gl.vertexAttribPointer(2, 4, gl.UNSIGNED_BYTE, true, 24, 16);
+    gl.enableVertexAttribArray(4); gl.vertexAttribPointer(4, 1, gl.UNSIGNED_BYTE, false, 24, 20);
+  }
   function mesh(mb) {
     if (!mb.n) return null;
     const vao = gl.createVertexArray(); gl.bindVertexArray(vao);
-    const vb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, vb); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mb.v), gl.STATIC_DRAW);
-    gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 44, 0);
-    gl.enableVertexAttribArray(1); gl.vertexAttribPointer(1, 3, gl.FLOAT, false, 44, 12);
-    gl.enableVertexAttribArray(2); gl.vertexAttribPointer(2, 4, gl.FLOAT, false, 44, 24);
-    gl.enableVertexAttribArray(4); gl.vertexAttribPointer(4, 1, gl.FLOAT, false, 44, 40);
+    const vb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, vb); gl.bufferData(gl.ARRAY_BUFFER, packVerts(mb.v), gl.STATIC_DRAW);
+    setMeshAttribs();
     gl.vertexAttrib2f(3, 0, 0);
     const ib = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(mb.i), gl.STATIC_DRAW);
     gl.bindVertexArray(null);
@@ -353,14 +370,11 @@ const GLR = (() => {
       o.idx.push(ix[t], ix[t + 1], ix[t + 2]);
       for (const q of [a, b, c]) { const x = v[q], y = v[q + 1], z = v[q + 2], bb = o.b; if (x < bb[0]) bb[0] = x; if (x > bb[1]) bb[1] = x; if (y < bb[2]) bb[2] = y; if (y > bb[3]) bb[3] = y; if (z < bb[4]) bb[4] = z; if (z > bb[5]) bb[5] = z; }
     }
-    const vb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, vb); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(v), gl.STATIC_DRAW);
+    const vb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, vb); gl.bufferData(gl.ARRAY_BUFFER, packVerts(v), gl.STATIC_DRAW);
     let refs = groups.size;
     return [...groups.values()].map((o) => {
       const vao = gl.createVertexArray(); gl.bindVertexArray(vao); gl.bindBuffer(gl.ARRAY_BUFFER, vb);
-      gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 44, 0);
-      gl.enableVertexAttribArray(1); gl.vertexAttribPointer(1, 3, gl.FLOAT, false, 44, 12);
-      gl.enableVertexAttribArray(2); gl.vertexAttribPointer(2, 4, gl.FLOAT, false, 44, 24);
-      gl.enableVertexAttribArray(4); gl.vertexAttribPointer(4, 1, gl.FLOAT, false, 44, 40);
+      setMeshAttribs();
       gl.vertexAttrib2f(3, 0, 0);
       const ib = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(o.idx), gl.STATIC_DRAW);
       gl.bindVertexArray(null);

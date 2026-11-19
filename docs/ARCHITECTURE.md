@@ -92,6 +92,7 @@ with `Esc`, `Space` or `Enter`. The map jump reuses it with a parachute.
 - `GLR.init(canvas, { shadow, aa, taps, shadowEvery })` sets the quality profile. `ride3d.js` picks a light profile on touch devices (`pointer: coarse`).
 - `Ride3D` scales the canvas resolution down automatically (`rscale`, minimum 0.5) when the smoothed frame time stays above about 24 ms, and caps rendering at about 60 fps.
 - Every chunk stores a bounding box. `GLR.render` skips items outside the camera frustum and outside the shadow box (`outside()` in `gl.js`).
+- Memory matters: a browser reloads a tab that uses too much. Do not keep references to the mesh builder (`MB`, `Loc`) after upload, share identical textures, and keep sign textures at about 160 px per metre. Add `?perf` to the URL to log chunk build times.
 - Avoid `backdrop-filter` and heavy SVG filters on elements that sit above the 3D canvas.
 
 ## Robustness
