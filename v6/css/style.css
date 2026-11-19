@@ -949,3 +949,6 @@ html.lenis, html.lenis body { height: auto; }
 #ride .panel { background: rgba(10,13,19,.95); }
 #ride .hub { background: rgba(6,8,14,.7); }
 .mm-wrap, .speedo, .loc { contain: layout style; }
+
+/* v6.51 : pendant l'entrée dans le terminal, le bouton « Passer » prend la place du compteur de vitesse */
+#ride:has(#hallSkip:not([hidden])) .speedo { display: none; }

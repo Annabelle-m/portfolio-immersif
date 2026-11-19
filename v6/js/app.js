@@ -286,6 +286,8 @@
   window.addEventListener("keydown", (e) => {
     if (view === "flight" && (e.key === "Escape" || e.key === " " || e.key === "Enter")) { e.preventDefault(); Flight3D.skip(); return; }
     if (view === "ride" && !$("#hallSkip").hidden) { if (e.key === "Escape" || e.key === "Enter" || e.key === " ") { e.preventDefault(); Ride3D.skipHall(); } return; }
+    if (view === "home" && $("#home").dataset.hall === "walk" && (e.key === "Escape" || e.key === "Enter" || e.key === " ")) { e.preventDefault(); skipIntro(); return; }   // v6.51 : espace = « Passer » aussi pour l'intro
+    if (view === "ride" && onFly.on && (e.key === "Escape" || e.key === " ")) { e.preventDefault(); Ride3D.skipFly(); return; }                                          // et pour le saut depuis la carte
     if (view !== "ride") return;
     if (e.target.closest && e.target.closest("input, textarea")) return;
     const k = KEYMAP[e.code];

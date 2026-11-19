@@ -186,7 +186,7 @@ const Ride3D = (() => {
     if (P.mode === "hall" && hall.sp.door) {
       const D = hall.sp.door, out = [Math.sin(D.ry), 0, Math.cos(D.ry)], inside = (cam.eye[0] - D.p[0]) * out[0] + (cam.eye[2] - D.p[2]) * out[2] < -.25;
       if (inside) {
-        const H = hallOf(hall.sp); env = envMix(envOf(AMB3.airport), envOf(AMB3.losangeles), .8); env.shadowR = 40; env.fogN = 300; env.fogF = 1600;
+        const H = hallOf(hall.sp); env = envMix(envOf(AMB3.airport), envOf(AMB3.losangeles), .8); env.shadowR = 40; env.fogN = 300; env.fogF = 1600; env.shadows = false;   // v6.51 : pas de passe d'ombres à l'intérieur du hall
         cam.shadowTarget = [D.p[0] - out[0] * 30, D.p[1], D.p[2] - out[2] * 30];
         GLR.render(cam, env, [{ mesh: H.mesh, spec: .35 }, { mesh: H.people, spec: .2 }], H.signs, time); drawSnow(0); return;
       }
@@ -351,6 +351,7 @@ const Ride3D = (() => {
     setKey(k, v) { if (v && !keys[k]) { if (k === "up") upEdge = true; if (k === "down") downEdge = true; } keys[k] = v; },
     closePanel() { if (P.mode === "reading") { P.mode = "drive"; cb.onPanel && cb.onPanel(null); } },
     armShortcut() { const j = NET.junctions.find((q) => { const d = sd(q.sb, P.s); return d > 0 && d < 62; }); if (j) { armed = j; lastPrompt = null; } },
+    skipFly() { if (fly) fly.t = fly.dur; },
     skipHall() { if (hall && !hall.done) { hall.done = true; cb.onHall && cb.onHall(); } },
     exitToAirport() { exiting = { t: 0 }; },
     setLang(l) { lang = l; for (const c of chunks.values()) c.signs = c.signs.map((s) => { if (!s.spec.linesObj) return s; GLR.delTex(s.tex); s.q.dispose(); return signGPU(s.spec); }); },

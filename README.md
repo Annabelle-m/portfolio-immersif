@@ -33,7 +33,7 @@ available, see [Classic version](#classic-version).
 | Where | What to do |
 | --- | --- |
 | Home (airport hall) | Pick a flight on the departures board. |
-| Flight | Watch the cutscene, or press `Esc`, `Space` or `Enter` to skip. |
+| Cutscenes (intro walk, flight, terminal entrance, map jump) | Press `Space` (or `Esc` / `Enter`) to skip, or click "Skip". |
 | Ride | `↑ ↓ ← →` or `W A S D` to drive. Stop at the glowing windows to open an info panel. |
 | Fork to the airport | Press `Enter` or `E` when the prompt appears to head back to the central hub. |
 | Minimap | Click a city to jump to it (with a parachute). |

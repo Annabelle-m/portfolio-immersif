@@ -46,3 +46,10 @@ Only `v6/` is present in this repository. Earlier versions were separate folders
 - **3D terminal hall** is prepared during the access road instead of at the door (about 20 ms, so now invisible).
 - **Return flight:** the ground no longer casts shadows (about half the triangles per frame).
 - **Minimap:** removed the extra US flag planted in the Statue of Liberty illustration (the plate already has one).
+
+## v6.51: skip with Space everywhere, lighter terminal
+
+- **Space skips every cutscene**: the intro walk on the home page, the flight, the terminal entrance and the parachute jump from the map (`Esc` and `Enter` work too, except `Enter` during the map jump).
+- **`people.glb` simplified** from 103 092 to 11 612 triangles (1.8 MB to 0.2 MB). The six travellers alone cost about 125 000 triangles per pass inside the terminal.
+- **No shadow pass inside the terminal.**
+- The "Skip" button no longer overlaps the speedometer.
