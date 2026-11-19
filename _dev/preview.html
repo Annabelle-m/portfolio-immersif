@@ -1,0 +1,14 @@
+<!doctype html><meta charset="utf-8"><style>html,body{margin:0;background:#888}canvas{width:100vw;height:100vh;display:block}</style>
+<canvas id="c"></canvas>
+<script src="../v6/js/data.js"></script><script src="../v6/js/gl.js"></script><script src="../v6/js/world.js"></script><script src="../v6/js/models.js"></script><script src="../v6/js/rider.js"></script>
+<script>
+window.ready = (async () => {
+  const c = document.getElementById('c'); c.width = innerWidth; c.height = innerHeight; GLR.init(c, { shadow: 2048 });
+  const q = new URLSearchParams(location.search); MODEL_FILES.length = 0; (q.get('files') || 'models/rider.glb').split(',').forEach(f => MODEL_FILES.push(f));
+  await loadModels('../v6/'); applyTemplates && 0;
+  const names = (q.get('tpl') || 'rider').split(','), mb = new MB(); names.forEach((n, i) => stampM(mb, n, M4.trs((i - (names.length - 1) / 2) * 1.2, 0, 0), null, null));
+  const g = new MB(); g.mat = MAT.paving; g.B(0, -.05, 0, 30, .05, 30, 0, '#9a9590'); const ground = GLR.mesh(g), mesh = GLR.mesh(mb);
+  window.shot = (eye, tgt, fov = 30, amb = 'paris') => { const cam = { eye, tgt, shadowTarget: tgt }; cam.vp = M4.mul(M4.persp(fov * Math.PI / 180, c.width / c.height, .05, 300), M4.lookAt(eye, tgt, [0, 1, 0])); const env = envOf(AMB3[amb]); env.shadowR = 4; GLR.render(cam, env, [{ mesh: ground }, { mesh, spec: .3 }], [], 1); };
+  return Object.keys(TPL).length;
+})();
+</script>
