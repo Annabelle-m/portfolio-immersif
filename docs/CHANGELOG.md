@@ -10,3 +10,16 @@ Only `v6/` is present in this repository. Earlier versions were separate folders
 | v4 | v3 with the rider, scooter and scenery modelled in Blender (`models/*.glb`). |
 | v5 | Organic characters, 3D flight and hall, shorter road, large windows, clickable map with parachute jump, scenery fixes. |
 | v6 | Sharper scooter and rider, even shorter roads, Paris and Skills scenery fixed, redesigned postcard, orbital map jump, new sound (generative music and ambience). |
+
+## v6.48: map fix and performance
+
+- **Minimap no longer clipped.** The SVG kept an old `border-radius: 50%` from the round map, which crops replaced elements. It is now square on desktop and round only on phones.
+- **Adaptive resolution.** The 3D canvas starts at 80% (touch) or 100% (desktop) of its target resolution and drops to as low as 50% if the frame time stays above about 24 ms.
+- **60 fps cap.** On 120 Hz screens only every other frame is drawn.
+- **Culling.** Road and scenery chunks outside the camera view, or outside the shadow box, are no longer drawn (bounding boxes computed once per chunk).
+- **Cheaper shadows.** The PCF sampler uses 8 taps on desktop and 5 on touch devices (was 12). On touch devices the shadow map is 1024 and refreshed every second frame.
+- **Cheaper shaders.** Procedural noise uses 3 octaves instead of 4.
+- **No antialiasing on touch devices**, no stencil buffer, opaque canvas.
+- **No `backdrop-filter` over the 3D view.** Blurring a live WebGL canvas is very expensive. The HUD backgrounds are slightly more opaque instead.
+- **Lighter minimap.** The blur and shadow SVG filters are gone, and the speed and minimap DOM updates run at about 15 Hz instead of every frame.
+- **Classic page loop** no longer runs while the 3D view is shown.

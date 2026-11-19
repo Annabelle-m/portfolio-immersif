@@ -166,6 +166,7 @@ class MB {
 
 /* ---------- Renderer ---------- */
 const GLR = (() => {
+  const Q = { taps: 12, shadowEvery: 1 }; let lastL = null, frameNo = 0;
   let progCloud; let gl, canvas, progMain, progShadow, progSky, progTex, shadowFB, shadowTex, SHADOW = 2048, skyVAO;
   const VS = `#version 300 es
   layout(location=0) in vec3 aP; layout(location=1) in vec3 aN; layout(location=2) in vec4 aC; layout(location=3) in vec2 aUV; layout(location=4) in float aM;
@@ -175,13 +176,13 @@ const GLR = (() => {
   precision highp float; precision highp sampler2DShadow;
   in vec3 vN, vW; in vec4 vC, vL; in vec2 vUV; flat in float vM; out vec4 o;
   uniform vec3 uSun, uSunC, uSky, uGnd, uFog, uCam, uTopC, uHorC; uniform float uFogN, uFogF, uFogA, uSpec, uEmis, uExpo, uTex, uTexLight, uTime;
-  uniform sampler2DShadow uSh; uniform sampler2D uT; uniform float uShOn, uTexel;
+  uniform sampler2DShadow uSh; uniform sampler2D uT; uniform float uShOn, uTexel; uniform int uTaps;
   vec3 lin(vec3 c){ return pow(c, vec3(2.2)); }
   float h3(vec3 p){ p = fract(p * .3183099 + .1); p *= 17.; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
   float n3(vec3 x){ vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. * f);
     return mix(mix(mix(h3(i), h3(i + vec3(1,0,0)), f.x), mix(h3(i + vec3(0,1,0)), h3(i + vec3(1,1,0)), f.x), f.y),
                mix(mix(h3(i + vec3(0,0,1)), h3(i + vec3(1,0,1)), f.x), mix(h3(i + vec3(0,1,1)), h3(i + vec3(1,1,1)), f.x), f.y), f.z); }
-  float fbm(vec3 p){ float s = 0., a = .5; for (int i = 0; i < 4; i++) { s += a * n3(p); p *= 2.03; a *= .5; } return s; }
+  float fbm(vec3 p){ float s = 0., a = .5; for (int i = 0; i < 3; i++) { s += a * n3(p); p *= 2.03; a *= .5; } return s * 1.14; }
   const vec2 PD[12] = vec2[12](vec2(-.326,-.406), vec2(-.840,-.074), vec2(-.696,.457), vec2(-.203,.621), vec2(.962,-.195), vec2(.473,-.480), vec2(.519,.767), vec2(.185,-.893), vec2(.507,.064), vec2(.896,.412), vec2(-.322,-.933), vec2(-.792,-.598));
   vec3 skyRef(vec3 r){ vec3 top = lin(uTopC), hor = lin(uHorC); return r.y > 0. ? mix(hor, top, pow(clamp(r.y * 1.4, 0., 1.), .7)) : hor * mix(.55, .35, clamp(-r.y * 3., 0., 1.)); }
   void main(){
@@ -210,8 +211,8 @@ const GLR = (() => {
     if (uShOn > .5 && lp.x > 0. && lp.x < 1. && lp.y > 0. && lp.y < 1. && lp.z < 1.) {
       float bias = .0008 + .0018 * (1. - abs(dot(n, uSun))); sh = 0.;
       float a = h3(wp * 13.) * 6.283; mat2 rot = mat2(cos(a), -sin(a), sin(a), cos(a));
-      for (int i = 0; i < 12; i++) sh += texture(uSh, vec3(lp.xy + rot * PD[i] * uTexel * 2.2, lp.z - bias));
-      sh /= 12.;
+      for (int i = 0; i < uTaps; i++) sh += texture(uSh, vec3(lp.xy + rot * PD[i] * uTexel * 2.2, lp.z - bias));
+      sh /= float(uTaps);
     }
     float ndl = max(dot(n, uSun), 0.);
     float wrap = m == 7 ? max(dot(n, uSun) * .5 + .5, 0.) * .5 : 0.;
@@ -307,9 +308,9 @@ const GLR = (() => {
     gl.depthMask(true); gl.disable(gl.BLEND); gl.bindVertexArray(null);
   }
   function init(c, opts = {}) {
-    canvas = c; gl = c.getContext("webgl2", { antialias: true, powerPreference: "high-performance" });
+    canvas = c; gl = c.getContext("webgl2", { antialias: opts.aa !== false, powerPreference: "high-performance", alpha: false, stencil: false });
     if (!gl) return false;
-    SHADOW = opts.shadow || 2048;
+    SHADOW = opts.shadow || 2048; if (opts.taps) Q.taps = opts.taps; if (opts.shadowEvery) Q.shadowEvery = opts.shadowEvery;
     progMain = compile(VS, FS); progShadow = compile(SVS, SFS); progSky = compile(KVS, KFS); progCloud = compile(CVS, CFS);
     shadowTex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, shadowTex);
     gl.texStorage2D(gl.TEXTURE_2D, 1, gl.DEPTH_COMPONENT24, SHADOW, SHADOW);
@@ -360,18 +361,32 @@ const GLR = (() => {
   function delTex(t) { gl.deleteTexture(t); }
 
   /* Une frame complète. items: [{mesh, m, fog, spec, shadow}] · signs: [{q, tex, m, light}] */
+  /* true si la boîte b = [x0,x1,y0,y1,z0,z1] (monde) est entièrement hors du volume défini par la matrice vp */
+  function outside(vp, b) {
+    let l = 0, r = 0, d = 0, u = 0, f = 0, bh = 0;
+    for (let i = 0; i < 8; i++) {
+      const x = b[i & 1], y = b[2 + ((i >> 1) & 1)], z = b[4 + ((i >> 2) & 1)];
+      const cx = vp[0] * x + vp[4] * y + vp[8] * z + vp[12], cy = vp[1] * x + vp[5] * y + vp[9] * z + vp[13], cz = vp[2] * x + vp[6] * y + vp[10] * z + vp[14], cw = vp[3] * x + vp[7] * y + vp[11] * z + vp[15];
+      if (cx < -cw) l++; if (cx > cw) r++; if (cy < -cw) d++; if (cy > cw) u++; if (cz > cw) f++; if (cz < -cw) bh++;
+    }
+    return l === 8 || r === 8 || d === 8 || u === 8 || f === 8 || bh === 8;
+  }
   function render(cam, env, items, signs, time) {
     const W = canvas.width, H = canvas.height;
+    frameNo++;
     // ombres
     const lt = cam.shadowTarget, sd = env.sunDir, R = env.shadowR || 70;
     const lv = M4.lookAt([lt[0] + sd[0] * 220, lt[1] + sd[1] * 220, lt[2] + sd[2] * 220], lt, Math.abs(sd[1]) > .98 ? [0, 0, 1] : [0, 1, 0]);
-    const L = M4.mul(M4.ortho(-R, R, -R, R, 20, 480), lv);
+    let L = M4.mul(M4.ortho(-R, R, -R, R, 20, 480), lv);
     const shadowOn = env.shadows !== false && sd[1] > .05;
-    if (shadowOn) {
+    const redo = !lastL || Q.shadowEvery <= 1 || frameNo % Q.shadowEvery === 0 || env.shadowR !== lastL.R;
+    if (shadowOn && !redo) L = lastL.L;   // ombre de l'image précédente (mobile) : texture inchangée, même matrice
+    if (shadowOn && redo) {
+      lastL = { L, R, sd };
       gl.bindFramebuffer(gl.FRAMEBUFFER, shadowFB); gl.viewport(0, 0, SHADOW, SHADOW);
       gl.clear(gl.DEPTH_BUFFER_BIT); gl.enable(gl.DEPTH_TEST); gl.disable(gl.CULL_FACE);
       gl.useProgram(progShadow.p); gl.uniformMatrix4fv(progShadow.u.uL, false, L);
-      for (const it of items) { if (it.shadow === false || !it.mesh) continue; gl.uniformMatrix4fv(progShadow.u.uM, false, it.m || IDM); gl.bindVertexArray(it.mesh.vao); gl.drawElements(gl.TRIANGLES, it.mesh.count, gl.UNSIGNED_INT, 0); }
+      for (const it of items) { if (it.shadow === false || !it.mesh || (it.b && !it.m && outside(L, it.b))) continue; gl.uniformMatrix4fv(progShadow.u.uM, false, it.m || IDM); gl.bindVertexArray(it.mesh.vao); gl.drawElements(gl.TRIANGLES, it.mesh.count, gl.UNSIGNED_INT, 0); }
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
     gl.viewport(0, 0, W, H);
@@ -388,11 +403,11 @@ const GLR = (() => {
     gl.uniformMatrix4fv(u.uVP, false, cam.vp); gl.uniformMatrix4fv(u.uL, false, L);
     gl.uniform3fv(u.uSun, env.sunDir); gl.uniform3fv(u.uSunC, env.sunCol); gl.uniform3fv(u.uSky, env.hemiSky); gl.uniform3fv(u.uGnd, env.hemiGnd);
     gl.uniform3fv(u.uFog, env.fog); gl.uniform3fv(u.uCam, cam.eye); gl.uniform1f(u.uFogN, env.fogN); gl.uniform1f(u.uFogF, env.fogF);
-    gl.uniform1f(u.uEmis, env.emis); gl.uniform1f(u.uExpo, env.expo); gl.uniform3fv(u.uTopC, env.skyTop); gl.uniform3fv(u.uHorC, env.skyHor); gl.uniform1f(u.uTime, time); gl.uniform1f(u.uShOn, shadowOn ? 1 : 0); gl.uniform1f(u.uTexel, 1 / SHADOW);
+    gl.uniform1f(u.uEmis, env.emis); gl.uniform1f(u.uExpo, env.expo); gl.uniform3fv(u.uTopC, env.skyTop); gl.uniform3fv(u.uHorC, env.skyHor); gl.uniform1f(u.uTime, time); gl.uniform1f(u.uShOn, shadowOn ? 1 : 0); gl.uniform1f(u.uTexel, 1 / SHADOW); gl.uniform1i(u.uTaps, Q.taps);
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, shadowTex); gl.uniform1i(u.uSh, 0); gl.uniform1i(u.uT, 1);
     gl.uniform1f(u.uTex, 0);
     for (const it of items) {
-      if (!it.mesh) continue;
+      if (!it.mesh || (it.b && !it.m && outside(cam.vp, it.b))) continue;
       gl.uniformMatrix4fv(u.uM, false, it.m || IDM); gl.uniform1f(u.uFogA, it.fog ?? 1); gl.uniform1f(u.uSpec, it.spec ?? .12);
       gl.bindVertexArray(it.mesh.vao); gl.drawElements(gl.TRIANGLES, it.mesh.count, gl.UNSIGNED_INT, 0);
     }
@@ -406,7 +421,7 @@ const GLR = (() => {
   }
   const IDM = M4.id();
 
-  return { init, mesh, texQuad, texture, delTex, render, cloudLayer, drawClouds, get gl() { return gl; } };
+  return { init, setQuality(o) { Object.assign(Q, o); }, mesh, texQuad, texture, delTex, render, cloudLayer, drawClouds, get gl() { return gl; } };
 })();
 
 /* ---------- Textes en texture ---------- */

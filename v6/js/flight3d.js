@@ -116,7 +116,7 @@ const Flight3D = (() => {
   }
   function draw(k) {
     const t = k * 6;
-    const r = canvas.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 1.25);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.25) * (matchMedia("(pointer: coarse)").matches ? .8 : 1), r = canvas.getBoundingClientRect();
     if (canvas.width !== Math.round(r.width * dpr)) { canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr); }
     const x = X(t), y = Y(t) + 3.2, pitch = Math.max(-.12, Math.min(.2, Math.atan2(Y(t + .05) - Y(t), X(t + .05) - X(t)) * .9));
     const bank = .18 * Math.sin(Math.PI * smooth((t - 2.6) / 1.6)) * (opts.reverse ? -1 : 1);

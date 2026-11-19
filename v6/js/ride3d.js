@@ -34,10 +34,15 @@ const Ride3D = (() => {
     const m = M4.mul(spec.L.M, M4.trs(spec.x, spec.y, spec.z, spec.back ? Math.PI : 0, 0, spec.rot || 0));
     return { tex, q, m, light: spec.light, spec };
   }
+  function bbox(mb) {   // boîte englobante [x0,x1,y0,y1,z0,z1] d'un maillage (sommets de 11 flottants, position en tête)
+    if (!mb || !mb.v || !mb.v.length) return null; const v = mb.v; let a = 1e9, b = -1e9, c = 1e9, d = -1e9, e = 1e9, f = -1e9;
+    for (let i = 0; i < v.length; i += 11) { const x = v[i], y = v[i + 1], z = v[i + 2]; if (x < a) a = x; if (x > b) b = x; if (y < c) c = y; if (y > d) d = y; if (z < e) e = z; if (z > f) f = z; }
+    return [a - 1, b + 1, c - 1, d + 1, e - 1, f + 1];
+  }
   function buildChunk(key) {
     if (chunks.has(key)) return chunks.get(key);
     const data = key[0] === "r" ? buildRingChunk(NET.sections[+key.slice(1)]) : buildSpokeChunk(NET.spokes[+key.slice(1)]);
-    const c = { main: GLR.mesh(data.mb), bg: GLR.mesh(data.bg), water: GLR.mesh(data.water), signs: data.signs.map(signGPU) };
+    const c = { main: GLR.mesh(data.mb), bg: GLR.mesh(data.bg), water: GLR.mesh(data.water), signs: data.signs.map(signGPU), bm: bbox(data.mb), bb: bbox(data.bg), bw: bbox(data.water) };
     chunks.set(key, c); return c;
   }
   function visible() {
@@ -172,7 +177,7 @@ const Ride3D = (() => {
     }
     const cur = P.path === "ring" ? NET.secAt(P.s).index : -1, nb = new Set(cur < 0 ? [] : [cur, (cur + 1) % NET.sections.length]);
     if (F) { items.push({ mesh: seaMesh, spec: 0, shadow: false }); env.fogN = 380; env.fogF = 2600; }
-    for (const k of (F ? chunks.keys() : visible())) { const c = chunks.get(k); if (!c) continue; items.push({ mesh: c.main }, { mesh: c.water, spec: 0, shadow: false }); if (F || k[0] !== "r" || nb.has(+k.slice(1))) items.push({ mesh: c.bg, fog: .5, shadow: false }); signs.push(...c.signs); }
+    for (const k of (F ? chunks.keys() : visible())) { const c = chunks.get(k); if (!c) continue; items.push({ mesh: c.main, b: c.bm }, { mesh: c.water, b: c.bw, spec: 0, shadow: false }); if (F || k[0] !== "r" || nb.has(+k.slice(1))) items.push({ mesh: c.bg, b: c.bb, fog: .5, shadow: false }); signs.push(...c.signs); }
     items.push({ mesh: rider, m: rm, spec: .3 });
     if (chuteM) items.push({ mesh: chute, m: chuteM, spec: .1 });
     if (P.path !== "ring" && NET.spokes[P.path].door) {
@@ -188,17 +193,25 @@ const Ride3D = (() => {
     snowCtx.fillStyle = `rgba(255,255,255,${.85 * a})`;
     for (const f of snow) { const x = ((f[0] * W + time * 25 * f[2] - P.x * 40) % W + W) % W, y = ((f[1] + time * .1 * f[2] + P.s * .0004) % 1) * H; snowCtx.beginPath(); snowCtx.arc(x, y, 1.6 * f[2] * (W / 1400 + .6), 0, 6.3); snowCtx.fill(); }
   }
+  const COARSE = matchMedia("(pointer: coarse)").matches;
+  let rscale = COARSE ? .8 : 1, slow = 0, fast = 0, ema = 16.7;   // v6.48 : échelle de résolution adaptative
   function resize() {
-    const r = canvas.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, r.width > 900 ? 1.25 : 1.5);
+    const r = canvas.getBoundingClientRect(), dpr = Math.max(.5, Math.min(window.devicePixelRatio || 1, r.width > 900 ? 1.25 : 1.5) * rscale);
     canvas.width = Math.max(2, Math.round(r.width * dpr)); canvas.height = Math.max(2, Math.round(r.height * dpr));
     if (snowCv) { snowCv.width = canvas.width; snowCv.height = canvas.height; }
   }
   function frame(now) {
     if (!running) return;
-    const raw = Math.min(.05, Math.max(.001, (now - last) / 1000 || dtS)); last = now;
+    raf = requestAnimationFrame(frame);
+    const el = now - last;
+    if (el < 12) return;   // écrans 120 Hz : on ne dessine qu'une image sur deux (60 i/s suffisent)
+    ema += (Math.min(el, 100) - ema) * .1;
+    if (!fly && !(P.mode === "hall")) {   // rien n'est ajusté pendant les cinématiques
+      if (ema > 24) { if (++slow > 20 && rscale > .5) { rscale = Math.max(.5, rscale * .85); slow = 0; ema = 16.7; resize(); } } else slow = 0;
+    }
+    const raw = Math.min(.05, Math.max(.001, el / 1000 || dtS)); last = now;
     dtS += (raw - dtS) * .2; // pas de temps lissé : mouvement régulier même si une image arrive en retard
     update(dtS); render(dtS);
-    raf = requestAnimationFrame(frame);
   }
   /* ---------- Saut en parachute vers le point cliqué sur la carte ---------- */
   function ringPose(s) { const f = NET.ring.at(s); return { pos: f.p.slice(), yaw: Math.atan2(f.t[0], f.t[2]) }; }
@@ -299,7 +312,7 @@ const Ride3D = (() => {
   return {
     init(c, snowCanvas, callbacks) {
       canvas = c; snowCv = snowCanvas; snowCtx = snowCanvas && snowCanvas.getContext("2d"); cb = callbacks || {};
-      ok = !!GLR.gl || GLR.init(c, { shadow: matchMedia("(pointer: coarse)").matches ? 1024 : 2048 });
+      ok = !!GLR.gl || GLR.init(c, COARSE ? { shadow: 1024, aa: false, taps: 5, shadowEvery: 2 } : { shadow: 2048, taps: 8 });
       if (ok) { rider = buildRider(); doorMesh = buildDoor(); const sm = new MB(); sm.mat = MAT.water; sm.aoY = null; const R = 3200; sm.quad([-R, -6.4, -R], [-R, -6.4, R], [R, -6.4, R], [R, -6.4, -R], "#2f6f9c"); seaMesh = GLR.mesh(sm); }
       window.addEventListener("resize", () => canvas && resize());
       return ok;
