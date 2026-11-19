@@ -2,8 +2,7 @@
 
 ## Static hosting
 
-Deploy the `v6/` folder, or the repository root. The root `index.html`
-redirects to `v6/`. Any static host works. For Vercel, `vercel.json`
+Deploy the repository root: the root `index.html` is the version-choice page and links to `v6/`. (Deploying `v6/` alone also works, you then land directly on the site.) Any static host works. For Vercel, `vercel.json`
 sets a one-week cache on `.glb`, `.webp`, `.png`, `.jpg` and `.woff2` files:
 
 ```json

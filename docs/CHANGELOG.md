@@ -75,3 +75,10 @@ Safari and Chrome reload a tab that uses too much memory ("This page was reloade
 - **Minimap shows the branches to the airport.** Each junction is drawn as a dashed line, in its world's colour, from the ring to the central airport. The scooter follows it when it takes the access road.
 - **No more lamp post in the access-road lane.** The airport-side lamps in junction sections were placed without checking the roads (`NET.clear`), so one stood in the branch lane right after the junction.
 - **Diagnostics:** `?perf` in the URL shows fps, canvas size and the adaptive resolution scale (green box, top left).
+
+## v6.54: choice page
+
+- New root `index.html`: a landing page with two cards, **immersive** (3D, recommended) and **classic**. FR/EN toggle, responsive, no JavaScript library. Links go to `v6/#immersive` and `v6/#classic` and keep the query string. The choice and language are saved so the next visit to `v6/` is consistent.
+- Old links (`/#classic`, `/#paris`) are forwarded to `v6/` unchanged.
+- Without WebGL2 a notice is shown and the immersive card leads to the classic version.
+- Switching between versions at any time still works through the buttons already present in each version.

@@ -1,6 +1,198 @@
 <!doctype html>
-<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Annabelle Megy · Portfolio</title>
-<script>location.replace("v6/" + location.search + location.hash);</script>
-<noscript><meta http-equiv="refresh" content="0; url=v6/"></noscript></head>
-<body><p><a href="v6/">Portfolio (v6)</a></p></body></html>
+<meta name="description" content="Portfolio d'Annabelle Megy, ancienne agente de voyage devenue développeuse full-stack. Choisissez la version immersive en 3D ou la version classique.">
+<meta property="og:title" content="Annabelle Megy · Portfolio">
+<meta property="og:description" content="Ancienne agente de voyage, future développeuse full-stack. Version immersive en 3D ou version classique.">
+<meta property="og:image" content="v6/assets/airport-terminal-home.webp">
+<meta name="theme-color" content="#0b0e14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600;800&display=swap">
+<style>
+:root {
+  --night: #0b0e14; --night-2: #151a24; --line: #283142; --text: #f4f6f8; --mute: #9aa4b5; --amber: #ffc23d;
+  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Instrument Sans", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "Martian Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  --gutter: max(18px, env(safe-area-inset-left, 0px));
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body { margin: 0; background: var(--night); color: var(--text); font: 16px/1.55 var(--f-body); -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--amber); outline-offset: 4px; }
+::selection { background: var(--amber); color: #0b0e14; }
+
+.page { min-height: 100svh; display: flex; flex-direction: column; padding: 0 var(--gutter); max-width: 1180px; margin: 0 auto; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: calc(18px + env(safe-area-inset-top, 0px)) 0 8px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 700 16px var(--f-display); }
+.brand i { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 10px; background: var(--amber); color: #1a1405; font: 800 14px var(--f-mono); font-style: normal; }
+.lang { padding: 9px 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,.28); background: transparent; color: var(--text); font: 600 12px/1 var(--f-mono); letter-spacing: .06em; cursor: pointer; }
+.lang:hover { background: rgba(255,255,255,.12); }
+
+.hero { padding: clamp(14px, 4vh, 44px) 0 clamp(10px, 2vh, 22px); }
+.kicker { margin: 0 0 14px; font: 600 11px var(--f-mono); letter-spacing: .18em; text-transform: uppercase; color: var(--amber); }
+h1 { margin: 0 0 12px; font: 800 clamp(40px, 7vw, 78px)/.95 var(--f-display); letter-spacing: -.03em; }
+.sub { margin: 0; max-width: 34em; font-size: clamp(17px, 2vw, 22px); color: rgba(255,255,255,.86); text-wrap: balance; }
+.ask { margin: clamp(16px, 3vh, 30px) 0 14px; font: 600 12px var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
+
+.choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.card { position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 12px; min-height: clamp(270px, 40vh, 380px); padding: clamp(20px, 3vw, 32px); border-radius: 22px; overflow: hidden; text-decoration: none; isolation: isolate; border: 1px solid var(--line); transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .25s, box-shadow .35s; }
+.card:hover, .card:focus-visible { transform: translateY(-4px); border-color: var(--amber); box-shadow: 0 24px 60px rgba(0,0,0,.45); }
+.card h2 { margin: 0; font: 800 clamp(26px, 3.2vw, 38px)/1.02 var(--f-display); letter-spacing: -.02em; }
+.card p { margin: 0; max-width: 30em; color: rgba(255,255,255,.84); }
+.meta { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.meta li { padding: .4em .75em; border-radius: 999px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.16); font: 600 11px var(--f-mono); letter-spacing: .04em; }
+.go { display: inline-flex; align-items: center; gap: 10px; align-self: flex-start; margin-top: 4px; padding: .8em 1.3em; border-radius: 999px; background: var(--amber); color: #1a1405; font: 700 14px var(--f-mono); letter-spacing: .02em; transition: background .2s, gap .25s; }
+.card:hover .go, .card:focus-visible .go { background: #ffd570; gap: 14px; }
+
+/* immersif : photo du terminal */
+.immersive { background: #2a2030; }
+.immersive img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 62% 50%; transition: transform .8s cubic-bezier(.2,.8,.2,1); }
+.immersive::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(11,14,20,.15) 0%, rgba(11,14,20,.55) 48%, rgba(11,14,20,.92) 100%); }
+.immersive:hover img, .immersive:focus-visible img { transform: scale(1.05); }
+.badge { align-self: flex-start; margin-bottom: auto; padding: .4em .8em; border-radius: 999px; background: rgba(11,14,20,.7); border: 1px solid rgba(255,255,255,.2); font: 600 11px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--amber); }
+
+/* classique : fiche épurée */
+.classic { background: linear-gradient(160deg, var(--night-2), #0d1119); }
+.classic .sheet { align-self: flex-end; margin-bottom: auto; width: min(46%, 170px); display: grid; gap: 8px; padding: 14px; border-radius: 14px; background: #f5f6f2; box-shadow: 0 18px 40px rgba(0,0,0,.4); transform: rotate(3deg); transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+.classic:hover .sheet, .classic:focus-visible .sheet { transform: rotate(0deg) translateY(-4px); }
+.sheet b { display: block; height: 14px; width: 62%; border-radius: 3px; background: #141b2b; }
+.sheet span { display: block; height: 7px; border-radius: 3px; background: #d9dcd4; }
+.sheet span:nth-child(3) { width: 90%; } .sheet span:nth-child(4) { width: 76%; } .sheet span:nth-child(6) { width: 84%; } .sheet span:nth-child(7) { width: 58%; }
+.sheet i { display: block; height: 22px; width: 44%; border-radius: 999px; background: var(--amber); }
+
+.note { margin: 18px 0 0; color: var(--mute); font-size: 14px; }
+.warn { margin: 12px 0 0; padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(255,194,61,.4); background: rgba(255,194,61,.08); color: #ffe3a1; font-size: 14px; }
+.foot { margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; padding: 34px 0 calc(26px + env(safe-area-inset-bottom, 0px)); color: var(--mute); font: 500 13px var(--f-mono); }
+.foot nav { display: flex; gap: 18px; }
+.foot a { text-decoration: none; border-bottom: 1px solid var(--line); }
+.foot a:hover { color: var(--amber); border-color: var(--amber); }
+
+@media (max-width: 760px) {
+  .choices { grid-template-columns: 1fr; }
+  .card { min-height: 260px; }
+  .classic .sheet { width: 130px; padding: 11px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="top">
+    <a class="brand" href="./"><i>AM</i><span>Annabelle Megy</span></a>
+    <button class="lang" id="lang" type="button" aria-label="Changer de langue / Switch language">EN</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="kicker" data-t="kicker"></p>
+      <h1>Annabelle Megy</h1>
+      <p class="sub" data-t="sub"></p>
+    </section>
+
+    <p class="ask" data-t="ask"></p>
+    <div class="choices">
+      <a class="card immersive" id="go-immersive" href="v6/#immersive" data-mode="immersive">
+        <img src="v6/assets/airport-terminal-home.webp" alt="" width="1600" height="900" loading="eager" decoding="async">
+        <span class="badge" data-t="rec"></span>
+        <h2 data-t="iTitle"></h2>
+        <p data-t="iText"></p>
+        <ul class="meta"><li data-t="iM1"></li><li data-t="iM2"></li><li data-t="iM3"></li></ul>
+        <span class="go"><span data-t="iGo"></span> <span aria-hidden="true">→</span></span>
+      </a>
+      <a class="card classic" id="go-classic" href="v6/#classic" data-mode="classic">
+        <div class="sheet" aria-hidden="true"><b></b><span></span><span></span><span></span><i></i><span></span><span></span></div>
+        <h2 data-t="cTitle"></h2>
+        <p data-t="cText"></p>
+        <ul class="meta"><li data-t="cM1"></li><li data-t="cM2"></li><li data-t="cM3"></li></ul>
+        <span class="go"><span data-t="cGo"></span> <span aria-hidden="true">→</span></span>
+      </a>
+    </div>
+    <p class="warn" id="warn" hidden data-t="noGl"></p>
+    <p class="note" data-t="note"></p>
+  </main>
+
+  <footer class="foot">
+    <span data-t="base"></span>
+    <nav>
+      <a href="mailto:annabelle.megy@gmail.com">E-mail</a>
+      <a href="https://www.linkedin.com/in/annabelle-megy-515721223/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/Annabelle-m" target="_blank" rel="noopener">GitHub</a>
+      <a href="v6/assets/cv/Annabelle_MEGY_CV.pdf" target="_blank" rel="noopener">CV</a>
+    </nav>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+  var search = location.search;
+
+  // Ancien lien direct (ex. /#classic ou /#paris) : on envoie tout de suite vers la bonne version
+  var h = location.hash.replace("#", "");
+  if (h) { location.replace("v6/" + search + "#" + h); return; }
+
+  var T = {
+    fr: {
+      kicker: "Recherche alternance M1 / M2 · Dév. full-stack",
+      sub: "Ancienne agente de voyage, future développeuse full-stack. Quinze ans à organiser les voyages des autres, aujourd'hui je construis des applications web.",
+      ask: "Comment voulez-vous découvrir mon portfolio ?",
+      rec: "Recommandé",
+      iTitle: "Version immersive", iText: "Embarquez à l'aéroport de Bordeaux, choisissez un vol et parcourez cinq pays en scooter. Chaque ville raconte une partie de mon parcours.",
+      iM1: "3D", iM2: "Son", iM3: "Ordinateur ou tablette", iGo: "Embarquer",
+      cTitle: "Version classique", cText: "Une page claire et rapide : parcours, compétences, expériences, projets et contact. Idéale pour tout lire en quelques minutes.",
+      cM1: "Sans 3D", cM2: "Lecture rapide", cM3: "Tous appareils", cGo: "Lire",
+      note: "Vous pourrez passer de l'une à l'autre à tout moment grâce au bouton en haut de la page.",
+      noGl: "Votre navigateur ne gère pas la 3D (WebGL2) : la version classique est recommandée.",
+      base: "Bordeaux · télétravail ou présentiel · permis B", lang: "EN"
+    },
+    en: {
+      kicker: "Seeking work-study M1 / M2 · Full-stack dev",
+      sub: "Former travel agent, future full-stack developer. Fifteen years organising other people's trips, now I build web applications.",
+      ask: "How would you like to explore my portfolio?",
+      rec: "Recommended",
+      iTitle: "Immersive version", iText: "Board at Bordeaux airport, pick a flight and ride a scooter through five countries. Each city tells part of my story.",
+      iM1: "3D", iM2: "Sound", iM3: "Desktop or tablet", iGo: "Take off",
+      cTitle: "Classic version", cText: "A clear, fast page: background, skills, experience, projects and contact. Perfect to read everything in a few minutes.",
+      cM1: "No 3D", cM2: "Quick read", cM3: "Any device", cGo: "Read",
+      note: "You can switch between the two at any time with the button at the top of the page.",
+      noGl: "Your browser does not support 3D (WebGL2): the classic version is recommended.",
+      base: "Bordeaux, France · remote or on-site · driving licence", lang: "FR"
+    }
+  };
+  var lang = store.get("am-lang") === "en" ? "en" : "fr";
+
+  function render() {
+    document.documentElement.lang = lang;
+    var nodes = document.querySelectorAll("[data-t]");
+    for (var i = 0; i < nodes.length; i++) nodes[i].textContent = T[lang][nodes[i].getAttribute("data-t")];
+    document.getElementById("lang").textContent = T[lang].lang;
+    document.title = lang === "fr" ? "Annabelle Megy · Portfolio" : "Annabelle Megy · Portfolio (EN)";
+  }
+  document.getElementById("lang").addEventListener("click", function () { lang = lang === "fr" ? "en" : "fr"; store.set("am-lang", lang); render(); });
+
+  // les liens gardent les paramètres (ex. ?perf) ; le choix est mémorisé pour la prochaine visite de v6
+  ["go-immersive", "go-classic"].forEach(function (id) {
+    var a = document.getElementById(id);
+    a.setAttribute("href", "v6/" + search + "#" + a.getAttribute("data-mode"));
+    a.addEventListener("click", function () { store.set("am-mode", a.getAttribute("data-mode")); store.set("am-lang", lang); });
+  });
+
+  // sans WebGL2, l'immersif n'est pas possible : la version classique est mise en avant
+  var gl2 = false; try { gl2 = !!document.createElement("canvas").getContext("webgl2"); } catch (e) {}
+  if (!gl2) {
+    document.getElementById("warn").hidden = false;
+    var im = document.getElementById("go-immersive"); im.setAttribute("aria-disabled", "true"); im.style.opacity = ".55";
+    im.addEventListener("click", function (e) { e.preventDefault(); location.href = "v6/" + search + "#classic"; });
+  }
+  render();
+})();
+</script>
+</body>
+</html>

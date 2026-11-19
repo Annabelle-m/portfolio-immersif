@@ -13,6 +13,10 @@ WebGL2 engine. There is no framework, no bundler and no build step.
 - **Sound:** generative music and ambience, synthesised with Web Audio (no audio files).
 - **Hosting:** any static host. A `vercel.json` is included.
 
+## Choosing a version
+
+The root page (`index.html`) asks how to explore the portfolio and sends visitors to `v6/#immersive` (3D) or `v6/#classic` (readable page). It stores the choice (`am-mode`) and the language (`am-lang`) in `localStorage`. Visitors can switch at any time with the **Classic version** / **Immersive version** button at the top of each version, and the browser's Back button returns to the choice page. Old direct links such as `/#classic` or `/#paris` still work: the root page forwards them to `v6/` unchanged, and extra parameters like `?perf` are preserved. Without WebGL2, the immersive card is dimmed and leads to the classic version.
+
 ## Quick start
 
 The 3D models are loaded with `fetch`, so the site must be served over HTTP.
@@ -56,7 +60,7 @@ Each country matches one section of the CV.
 
 ```
 .
-├── index.html            Redirects to v6/
+├── index.html            Landing page: choose the immersive or the classic version
 ├── vercel.json           Cache headers for static assets
 ├── docs/                 Project documentation (see below)
 ├── _dev/                 Throw-away patch scripts used during development
